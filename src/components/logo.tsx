@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export const Logo = ({ href = "/dashboard" }: { href?: string }) => {
+export const Logo = ({ href = "/weddings" }: { href?: string }) => {
   return (
     <Link href={href} className="flex items-center">
       <Image src={"/logo.svg"} alt="Logo" width={30} height={30} priority />

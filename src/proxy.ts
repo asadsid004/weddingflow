@@ -12,9 +12,15 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(new URL("/", request.url));
     }
 
+    const isAtWeddingsBaseRoute = request.nextUrl.pathname === "/weddings";
+
+    if (session.user.totalWeddings === 0 && !isAtWeddingsBaseRoute) {
+        return NextResponse.redirect(new URL("/weddings", request.url));
+    }
+
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/dashboard"],
+    matcher: ["/weddings/:path*"],
 };

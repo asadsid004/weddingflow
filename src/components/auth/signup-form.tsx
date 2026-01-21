@@ -67,7 +67,7 @@ export function SignUpForm({ disabled, onLoading }: SignUpFormProps) {
 
       if (error) throw new Error(error.message);
 
-      router.push("/dashboard");
+      router.push("/weddings");
     } catch (error) {
       const err = error as Error;
       toast.error(err.message || "Failed to create account");

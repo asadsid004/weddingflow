@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth-client";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -18,10 +17,9 @@ import {
 import { SignInGoogle } from "./signin-google";
 import { SignInForm } from "./signin-form";
 import { SignUpForm } from "./signup-form";
+import Link from "next/link";
 
 export function AuthForm({ title = "Sign In" }: { title?: string }) {
-  const router = useRouter();
-
   const [view, setView] = useState<"signin" | "signup">("signin");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -33,7 +31,9 @@ export function AuthForm({ title = "Sign In" }: { title?: string }) {
 
   if (session) {
     return (
-      <Button onClick={() => router.push("/dashboard")}>Go to Dashboard</Button>
+      <Link href="/weddings" className={buttonVariants()}>
+        Continue Planning
+      </Link>
     );
   }
 

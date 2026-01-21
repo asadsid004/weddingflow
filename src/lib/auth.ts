@@ -17,5 +17,20 @@ export const auth = betterAuth({
     database: drizzleAdapter(db, {
         provider: "pg",
     }),
+    user: {
+        additionalFields: {
+            totalWeddings: {
+                type: "number",
+                default: 0,
+                required: false,
+            },
+        },
+    },
+    session: {
+        cookieCache: {
+            enabled: true,
+            maxAge: 5 * 60,
+        }
+    },
     plugins: [nextCookies()],
 });

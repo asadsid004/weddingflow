@@ -20,7 +20,7 @@ export const SignInGoogle = ({ disabled, onLoading }: SignInGoogleProps) => {
       onLoading(true);
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/dashboard",
+        callbackURL: "/weddings",
       });
     } catch (error) {
       const err = error as Error;

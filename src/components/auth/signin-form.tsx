@@ -62,7 +62,7 @@ export function SignInForm({ disabled, onLoading }: SignInFormProps) {
 
       if (error) throw new Error(error.message);
 
-      router.push("/dashboard");
+      router.push("/weddings");
     } catch (error) {
       const err = error as Error;
       toast.error(err.message || "Invalid email or password");
