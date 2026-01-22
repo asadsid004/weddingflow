@@ -23,7 +23,6 @@ const WeddingFormSchema = z.object({
   brideName: z.string().min(1, "Bride name is required"),
   groomName: z.string().min(1, "Groom name is required"),
   weddingDate: z.date().min(new Date(), "Wedding date cannot be in the past"),
-  estimatedGuests: z.number().min(1, "Estimated guests is required"),
   totalBudget: z.number().min(0, "Total budget cannot be less than 0"),
 });
 
@@ -49,7 +48,6 @@ export const WeddingForm = () => {
       brideName: "",
       groomName: "",
       weddingDate: new Date(),
-      estimatedGuests: 1,
       totalBudget: 1,
     },
     validators: {
@@ -121,56 +119,32 @@ export const WeddingForm = () => {
             );
           }}
         </form.Field>
-        <form.Field name="weddingDate">
-          {(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <FieldSet className="-mt-4">
-                <FieldLegend variant="label" className="mb-1">
-                  Wedding Date
-                </FieldLegend>
-                <Input
-                  id={field.name}
-                  type="date"
-                  name={field.name}
-                  value={
-                    field.state.value instanceof Date
-                      ? field.state.value.toISOString().split("T")[0]
-                      : ""
-                  }
-                  onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(new Date(e.target.value))}
-                  aria-invalid={isInvalid}
-                  disabled={isPending}
-                  min={new Date().toISOString().split("T")[0]}
-                  required
-                />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </FieldSet>
-            );
-          }}
-        </form.Field>
         <div className="flex gap-2">
-          <form.Field name="estimatedGuests">
+          <form.Field name="weddingDate">
             {(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <FieldSet className="-mt-4 w-full">
                   <FieldLegend variant="label" className="mb-1">
-                    Estimated Guests
+                    Wedding Date
                   </FieldLegend>
                   <Input
                     id={field.name}
-                    type="number"
+                    type="date"
                     name={field.name}
-                    value={field.state.value}
+                    value={
+                      field.state.value instanceof Date
+                        ? field.state.value.toISOString().split("T")[0]
+                        : ""
+                    }
                     onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(Number(e.target.value))}
+                    onChange={(e) =>
+                      field.handleChange(new Date(e.target.value))
+                    }
                     aria-invalid={isInvalid}
                     disabled={isPending}
-                    min={1}
+                    min={new Date().toISOString().split("T")[0]}
                     required
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -178,6 +152,7 @@ export const WeddingForm = () => {
               );
             }}
           </form.Field>
+
           <form.Field name="totalBudget">
             {(field) => {
               const isInvalid =
