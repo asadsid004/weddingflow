@@ -2,7 +2,7 @@
 
 import { eq, sql } from "drizzle-orm";
 import { db } from "@/db/drizzle";
-import { user, weddings } from "@/db/schema";
+import { user, weddings, events } from "@/db/schema";
 import { isAuthenticated } from "@/lib/auth-helpers";
 
 export const getWeddings = async () => {
@@ -40,6 +40,13 @@ export const createWedding = async ({
     if (!result[0]) {
         throw new Error("Failed to create wedding");
     }
+
+    await db.insert(events).values({
+        weddingId: result[0].id,
+        userId: session.user.id,
+        name: "Wedding Ceremony",
+        date: weddingDate.toISOString().split('T')[0],
+    });
 
     await db
         .update(user)
