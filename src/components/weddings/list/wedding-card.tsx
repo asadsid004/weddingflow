@@ -52,7 +52,7 @@ export const WeddingCard = ({
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="bg-muted flex items-center justify-between rounded-md p-2">
-          <div className="flex items-center gap-2">
+          <div className="text-muted-foreground flex items-center gap-2">
             <HugeiconsIcon
               icon={Clock03Icon}
               strokeWidth={2}
@@ -60,10 +60,10 @@ export const WeddingCard = ({
             />
             <span>Days Left</span>
           </div>
-          <div className="text-base font-medium">{daysLeft}</div>
+          <div className="font-medium">{daysLeft}</div>
         </div>
         <div className="bg-muted flex items-center justify-between rounded-md p-2">
-          <div className="flex items-center gap-2">
+          <div className="text-muted-foreground flex items-center gap-2">
             <HugeiconsIcon
               icon={Money03Icon}
               strokeWidth={2}
@@ -71,7 +71,7 @@ export const WeddingCard = ({
             />
             <span>Budget (₹ Lakhs)</span>
           </div>
-          <div className="text-base font-medium">{totalBudget}</div>
+          <div className="font-medium">{totalBudget}</div>
         </div>
       </CardContent>
       <CardFooter>

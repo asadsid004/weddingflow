@@ -162,7 +162,7 @@ export function SignUpForm({ disabled, onLoading }: SignUpFormProps) {
           disabled={disabled || isLoading}
         >
           {isLoading && <Spinner className="mr-2 h-4 w-4" />}
-          Sign In
+          Sign Up
         </Button>
       </FieldGroup>
     </form>
