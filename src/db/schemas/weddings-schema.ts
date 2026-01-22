@@ -1,4 +1,4 @@
-import { date, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { date, decimal, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 
 export const weddings = pgTable('weddings', {
@@ -13,18 +13,8 @@ export const weddings = pgTable('weddings', {
         .notNull()
         .references(() => user.id, { onDelete: "cascade" }),
 
-    // Venue Details
-    venue: text('venue'),
-    venueAddress: text('venue_address'),
-
-    // Theme
-    theme: text('theme'),
-
-    // Guest Details
-    estimatedGuests: integer('estimated_guests'),
-
     // Budget
-    totalBudget: integer('total_budget').default(0),
+    totalBudget: decimal('total_budget', { precision: 10, scale: 2 }).default('0'),
 
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
