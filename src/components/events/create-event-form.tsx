@@ -7,6 +7,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 
 import { createEvent } from "@/actions/events";
+import { convertTo12Hour } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,10 +30,6 @@ const eventSchema = z
     endTime: z
       .string()
       .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
-    estimatedGuests: z
-      .number()
-      .positive("Must be a positive number")
-      .min(1, "At least 1 guest required"),
   })
   .refine(
     (data) => {
@@ -60,10 +57,9 @@ export function CreateEventForm({ weddingId }: { weddingId: string }) {
       date: string;
       startTime: string;
       endTime: string;
-      estimatedGuests: number;
     }) => createEvent(weddingId, event),
     onSuccess: (id) => {
-      router.push(`/dashboard/${weddingId}/events/${id}`);
+      router.push(`/weddings/${weddingId}/events/${id}`);
       toast.success("Event created successfully");
     },
     onError: () => {
@@ -77,13 +73,18 @@ export function CreateEventForm({ weddingId }: { weddingId: string }) {
       date: "",
       startTime: "",
       endTime: "",
-      estimatedGuests: 0,
     },
     validators: {
       onSubmit: eventSchema,
     },
     onSubmit: async ({ value }) => {
-      mutate(value);
+      const startTime12 = convertTo12Hour(value.startTime);
+      const endTime12 = convertTo12Hour(value.endTime);
+      mutate({
+        ...value,
+        startTime: startTime12,
+        endTime: endTime12,
+      });
     },
   });
 
@@ -204,32 +205,6 @@ export function CreateEventForm({ weddingId }: { weddingId: string }) {
           }}
         </form.Field>
       </div>
-
-      <form.Field name="estimatedGuests">
-        {(field) => {
-          const isInvalid =
-            field.state.meta.isTouched && !field.state.meta.isValid;
-          return (
-            <FieldSet>
-              <FieldLegend variant="label" className="mb-1">
-                Estimated Guests <span className="text-destructive">*</span>
-              </FieldLegend>
-              <Input
-                id={field.name}
-                name={field.name}
-                type="number"
-                min="1"
-                value={field.state.value || ""}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(Number(e.target.value))}
-                placeholder="200"
-              />
-              {isInvalid && <FieldError errors={field.state.meta.errors} />}
-            </FieldSet>
-          );
-        }}
-      </form.Field>
-
       <Button
         type="button"
         className="mt-2 w-full"

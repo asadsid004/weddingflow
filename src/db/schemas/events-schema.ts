@@ -22,10 +22,7 @@ export const events = pgTable('events', {
     venue: text('venue'),
     venueAddress: text('venue_address'),
 
-    estimatedGuests: integer('estimated_guests'),
-
     allocatedBudget: decimal('allocated_budget', { precision: 10, scale: 2 }),
-    description: text('description'),
 
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
