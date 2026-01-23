@@ -1,4 +1,4 @@
-import { pgTable, text, date, integer, decimal, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, date, decimal, timestamp } from "drizzle-orm/pg-core";
 import { weddings } from "./weddings-schema";
 import { user } from "./auth-schema";
 

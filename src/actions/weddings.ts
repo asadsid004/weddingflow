@@ -11,6 +11,12 @@ export const getWeddings = async () => {
     return await db.select().from(weddings).where(eq(weddings.userId, session.user.id));
 }
 
+export const getWeddingById = async (weddingId: string) => {
+    await isAuthenticated();
+
+    return await db.select().from(weddings).where(eq(weddings.id, weddingId));
+}
+
 export const createWedding = async ({
     brideName,
     groomName,
@@ -56,4 +62,18 @@ export const createWedding = async ({
         .where(eq(user.id, session.user.id));
 
     return result[0].id;
+}
+
+export const increaseTotalBudget = async ({
+    weddingId,
+    totalBudget,
+}: {
+    weddingId: string;
+    totalBudget: number;
+}) => {
+    await isAuthenticated();
+
+    await db.update(weddings).set({
+        totalBudget: totalBudget.toFixed(2),
+    }).where(eq(weddings.id, weddingId));
 }
