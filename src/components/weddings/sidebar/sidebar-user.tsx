@@ -87,7 +87,7 @@ export const SidebarUser = ({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
+            <DropdownMenuItem>
               <HugeiconsIcon icon={Settings01Icon} strokeWidth={2} />
               <span>Settings</span>
             </DropdownMenuItem>
