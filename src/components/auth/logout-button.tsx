@@ -10,7 +10,13 @@ import { Spinner } from "@/components/ui/spinner";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Logout05Icon } from "@hugeicons/core-free-icons";
 
-export function Logout({ className }: { className?: string }) {
+export function Logout({
+  className,
+  variant = "outline",
+}: {
+  className?: string;
+  variant?: "outline" | "ghost" | "link" | "default";
+}) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -46,7 +52,7 @@ export function Logout({ className }: { className?: string }) {
   return (
     <Button
       className={className}
-      variant="outline"
+      variant={variant}
       onClick={handleLogout}
       disabled={isLoading}
     >
