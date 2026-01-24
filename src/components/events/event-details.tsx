@@ -43,6 +43,7 @@ export const EventDetails = ({
           date: event.date,
           startTime: event.startTime!,
           endTime: event.endTime!,
+          allocatedBudget: Number(event.allocatedBudget) || 0,
         }}
       />
       <EventDetailsEditable

@@ -133,3 +133,13 @@ export const deleteExpense = async (expenseId: string) => {
 
     await db.delete(expenses).where(eq(expenses.id, expenseId));
 };
+
+export const getExpensesByEventId = async (eventId: string) => {
+    await isAuthenticated();
+
+    const allExpenses = await db.query.expenses.findMany({
+        where: eq(expenses.eventId, eventId),
+    });
+
+    return allExpenses;
+};
