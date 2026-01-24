@@ -1,5 +1,5 @@
 import { CreateEventButton } from "@/components/events/create-event-button";
-import { EventCountCard } from "@/components/events/event-count-card";
+import { EventLists } from "@/components/events/events-list";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { AppHeader } from "@/components/weddings/sidebar/app-header";
 
@@ -19,7 +19,7 @@ const EventsPage = async ({
           <CreateEventButton weddingId={weddingId} />
         </div>
         <div className="mt-4">
-          <EventCountCard weddingId={weddingId} />
+          <EventLists weddingId={weddingId} />
         </div>
       </div>
     </SidebarInset>
