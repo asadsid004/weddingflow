@@ -1,5 +1,6 @@
 import { AddExpenseButton } from "@/components/budget/add-expense-button";
 import { BudgetOverview } from "@/components/budget/budget-overview";
+import { ExpensesList } from "@/components/budget/expenses-list";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { AppHeader } from "@/components/weddings/sidebar/app-header";
 
@@ -19,6 +20,7 @@ const BudgetPage = async ({
           <AddExpenseButton weddingId={weddingId} />
         </div>
         <BudgetOverview weddingId={weddingId} />
+        <ExpensesList weddingId={weddingId} />
       </div>
     </SidebarInset>
   );

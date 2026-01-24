@@ -75,3 +75,61 @@ export const getExpenses = async (weddingId: string) => {
 
     return allExpenses;
 };
+
+export const updateExpense = async ({
+    expenseId,
+    description,
+    amount,
+    eventId,
+    date,
+}: {
+    expenseId: string;
+    description: string;
+    amount: number;
+    eventId: string;
+    date: string;
+}) => {
+    const session = await isAuthenticated();
+
+    if (!session) {
+        throw new Error("Unauthorized");
+    }
+    const expense = await db.query.expenses.findFirst({
+        where: eq(expenses.id, expenseId),
+    });
+
+    if (!expense) {
+        throw new Error("Expense not found or unauthorized");
+    }
+
+    const updatedExpense = await db
+        .update(expenses)
+        .set({
+            description,
+            amount: amount.toFixed(2),
+            eventId,
+            date,
+        })
+        .where(eq(expenses.id, expenseId))
+        .returning();
+
+    if (!updatedExpense) {
+        throw new Error("Failed to update expense");
+    }
+
+    return updatedExpense;
+};
+
+export const deleteExpense = async (expenseId: string) => {
+    await isAuthenticated();
+
+    const expense = await db.query.expenses.findFirst({
+        where: eq(expenses.id, expenseId),
+    });
+
+    if (!expense) {
+        throw new Error("Expense not found or unauthorized");
+    }
+
+    await db.delete(expenses).where(eq(expenses.id, expenseId));
+};
