@@ -29,7 +29,7 @@ export const EventOverviewCard = ({
   return (
     <div className="space-y-4">
       <div className="flex flex-row justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">{event.name}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">{event.name}</h1>
         <EventDeleteButton eventId={event.id} weddingId={event.weddingId} />
       </div>
 
