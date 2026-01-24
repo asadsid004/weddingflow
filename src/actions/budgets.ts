@@ -62,3 +62,16 @@ export const createExpense = async ({
 
     return newExpense;
 };
+
+export const getExpenses = async (weddingId: string) => {
+    const session = await isAuthenticated();
+
+    if (!session) {
+        throw new Error("Unauthorized");
+    }
+    const allExpenses = await db.query.expenses.findMany({
+        where: eq(expenses.weddingId, weddingId),
+    });
+
+    return allExpenses;
+};
