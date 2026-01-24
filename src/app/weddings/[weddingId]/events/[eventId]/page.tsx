@@ -1,7 +1,6 @@
 import { EventDetails } from "@/components/events/event-details";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { AppHeader } from "@/components/weddings/sidebar/app-header";
-import React from "react";
 
 const EventDetailsPage = async ({
   params,
@@ -18,7 +17,9 @@ const EventDetailsPage = async ({
           { label: "Details" },
         ]}
       />
-      <EventDetails eventId={eventId} weddingId={weddingId} />
+      <div className="mx-auto w-full max-w-7xl p-4">
+        <EventDetails eventId={eventId} weddingId={weddingId} />
+      </div>
     </SidebarInset>
   );
 };

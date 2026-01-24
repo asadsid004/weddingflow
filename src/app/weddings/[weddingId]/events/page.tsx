@@ -13,7 +13,7 @@ const EventsPage = async ({
   return (
     <SidebarInset>
       <AppHeader breadcrumbs={[{ label: "Events" }]} />
-      <div className="p-4">
+      <div className="mx-auto w-full max-w-7xl p-4">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-semibold tracking-tight">Your Events</h1>
           <CreateEventButton weddingId={weddingId} />

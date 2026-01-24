@@ -1,10 +1,10 @@
 "use client";
 
-import { getEventById, getEvents } from "@/actions/events";
+import { getEventById } from "@/actions/events";
 import { useQuery } from "@tanstack/react-query";
 import { EventOverviewCard } from "./event-overview";
 import { EventDetailsEditable } from "./event-details-editable";
-import { getWeddingById } from "@/actions/weddings";
+import { Skeleton } from "../ui/skeleton";
 
 export const EventDetails = ({
   eventId,
@@ -18,22 +18,19 @@ export const EventDetails = ({
     queryFn: () => getEventById(eventId),
   });
 
-  const { data: wedding } = useQuery({
-    queryKey: ["wedding", weddingId],
-    queryFn: () => getWeddingById(weddingId),
-  });
-
-  const { data: events } = useQuery({
-    queryKey: ["events", weddingId],
-    queryFn: () => getEvents(weddingId),
-  });
-
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="space-y-4 px-6 py-4">
+        <Skeleton className="h-[30vh] w-full" />
+        <Skeleton className="h-[50vh] w-full" />
+      </div>
+    );
   }
 
   if (!event) {
-    return <div>Event not found</div>;
+    return (
+      <div className="px-6 pt-20 text-center text-2xl">Event not found</div>
+    );
   }
 
   return (
@@ -55,15 +52,8 @@ export const EventDetails = ({
           endTime: event.endTime!,
           venue: event.venue || "",
           venueAddress: event.venueAddress || "",
-          allocatedBudget: Number(event.allocatedBudget),
         }}
-        totalWeddingBudget={Number(wedding?.[0].totalBudget || 0)}
         weddingId={weddingId}
-        allEvents={events?.map((e) => ({
-          id: e.id,
-          allocatedBudget: Number(e.allocatedBudget || 0),
-        }))}
-        currentEventId={eventId}
       />
     </div>
   );
