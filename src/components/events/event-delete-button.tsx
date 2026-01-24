@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -27,10 +27,15 @@ export function EventDeleteButton({
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
+  const queryClient = useQueryClient();
+
   const { mutate: deleteMutate, isPending: isDeleting } = useMutation({
     mutationFn: () => deleteEvent(eventId),
     onSuccess: () => {
       toast.success("Event deleted successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["events", weddingId],
+      });
       setOpen(false);
       router.push(`/weddings/${weddingId}/events`);
     },
