@@ -8,6 +8,10 @@ import { EditBudgetForm } from "./edit-budget-form";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 
+export const formatCurrency = (amount: number) => {
+  return `${amount.toLocaleString("en-IN")}`;
+};
+
 export const EventBudgetCard = ({
   currentEventId,
   weddingId,
@@ -15,10 +19,6 @@ export const EventBudgetCard = ({
   currentEventId: string;
   weddingId: string;
 }) => {
-  const formatCurrency = (amount: number) => {
-    return `${amount.toLocaleString("en-IN")}`;
-  };
-
   const { data: events, isLoading: eventsLoading } = useQuery({
     queryKey: ["events", weddingId],
     queryFn: () => getEvents(weddingId),
@@ -96,6 +96,7 @@ export const EventBudgetCard = ({
         <EditBudgetForm
           currentEventBudget={currentEventBudget}
           currentTotalBudget={totalWeddingBudget}
+          remainingBudgetForAllocation={remainingBudgetForAllocation}
           eventId={currentEventId}
           weddingId={weddingId}
         />
@@ -119,7 +120,9 @@ export const EventBudgetCard = ({
         </div>
         <div className="bg-border h-px" />
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium">Available for This Event</span>
+          <span className="text-muted-foreground text-sm font-medium">
+            Available for This Event
+          </span>
           <span className="font-semibold text-blue-500">
             {formatCurrency(remainingBudgetForAllocation)}
           </span>

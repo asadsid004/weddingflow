@@ -3,9 +3,7 @@ import { useForm } from "@tanstack/react-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import z from "zod";
-
 import { increaseTotalBudget } from "@/actions/weddings";
-
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -31,14 +29,15 @@ export const EditBudgetForm = ({
   eventId,
   currentTotalBudget,
   currentEventBudget,
+  remainingBudgetForAllocation,
 }: {
   weddingId: string;
   eventId: string;
   currentTotalBudget: number;
   currentEventBudget: number;
+  remainingBudgetForAllocation: number;
 }) => {
   const [open, setOpen] = useState(false);
-
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
@@ -69,16 +68,48 @@ export const EditBudgetForm = ({
     },
   });
 
+  const budgetSchema = z
+    .object({
+      totalBudget: z
+        .string()
+        .min(1, "Total budget is required")
+        .refine((val) => !isNaN(Number(val)), "Must be a valid number")
+        .refine(
+          (val) => Number(val) >= currentTotalBudget,
+          "Total budget cannot be decreased",
+        ),
+      allocatedBudget: z
+        .string()
+        .min(1, "Allocated budget is required")
+        .refine((val) => !isNaN(Number(val)), "Must be a valid number")
+        .refine(
+          (val) => Number(val) >= 0,
+          "Allocated budget cannot be negative",
+        ),
+    })
+    .refine(
+      (data) => {
+        const newTotal = Number(data.totalBudget);
+        const newAllocated = Number(data.allocatedBudget);
+        const budgetIncrease = newTotal - currentTotalBudget;
+        const availableBudget = remainingBudgetForAllocation + budgetIncrease;
+
+        return newAllocated <= availableBudget;
+      },
+      {
+        message:
+          "Allocated budget exceeds available budget. Please increase total budget first.",
+        path: ["allocatedBudget"],
+      },
+    );
+
   const form = useForm({
     defaultValues: {
       totalBudget: currentTotalBudget.toString(),
       allocatedBudget: currentEventBudget.toString(),
     },
     validators: {
-      onSubmit: z.object({
-        totalBudget: z.string().min(1, "Amount is required"),
-        allocatedBudget: z.string().min(0, "Amount can't be less than 0"),
-      }),
+      onSubmit: budgetSchema,
     },
     onSubmit: ({ value }) => {
       mutate({
@@ -102,19 +133,32 @@ export const EditBudgetForm = ({
             Edit Budget
           </ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            form.handleSubmit();
-          }}
-          className="space-y-4 pt-8"
-        >
+        <div className="space-y-4 pt-4">
+          <div className="bg-muted/50 rounded-lg p-3 text-sm">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">
+                Current Total Budget:
+              </span>
+              <span className="font-medium">
+                ₹{currentTotalBudget.toFixed(2)} L
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">
+                Available for Allocation:
+              </span>
+              <span className="font-medium">
+                ₹{remainingBudgetForAllocation.toFixed(2)} L
+              </span>
+            </div>
+          </div>
+
           <form.Field name="totalBudget">
             {(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid;
               return (
-                <FieldSet className="-mt-4 w-full">
+                <FieldSet className="w-full">
                   <FieldLegend variant="label" className="mb-1">
                     Total Budget (₹ Lakhs)
                   </FieldLegend>
@@ -132,26 +176,29 @@ export const EditBudgetForm = ({
                     aria-invalid={isInvalid}
                     disabled={isPending}
                     step={0.01}
-                    min={0}
+                    min={currentTotalBudget}
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </FieldSet>
               );
             }}
           </form.Field>
+
           <form.Field name="allocatedBudget">
             {(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid;
+
+              const newTotal = form.state.values.totalBudget;
+              const budgetIncrease = Number(newTotal) - currentTotalBudget;
+              const dynamicAvailable =
+                remainingBudgetForAllocation + budgetIncrease;
+
               return (
-                <FieldSet className="mt-4 w-full">
+                <FieldSet className="w-full">
                   <FieldLegend variant="label" className="mb-1">
                     Budget Allocated to this Event (₹ Lakhs)
                   </FieldLegend>
-                  <FieldDescription className="-mb-4">
-                    Increase the total budget to allocate more funds to this
-                    event.
-                  </FieldDescription>
                   <Input
                     id={field.name}
                     type="number"
@@ -163,14 +210,16 @@ export const EditBudgetForm = ({
                     disabled={isPending}
                     step={0.01}
                     min={0}
+                    max={dynamicAvailable}
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </FieldSet>
               );
             }}
           </form.Field>
+
           <Button
-            type="submit"
+            onClick={() => form.handleSubmit()}
             variant="default"
             className="w-full"
             disabled={isPending}
@@ -184,7 +233,7 @@ export const EditBudgetForm = ({
               "Update Budget"
             )}
           </Button>
-        </form>
+        </div>
       </ResponsiveDialogContent>
     </ResponsiveDialog>
   );
