@@ -32,7 +32,7 @@ export const EventOverviewCard = ({
   );
 
   const { data: expenses } = useQuery({
-    queryKey: ["expenses", event.id],
+    queryKey: ["expenses", event.weddingId, event.id],
     queryFn: () => getExpensesByEventId(event.id),
   });
 

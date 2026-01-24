@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { EventOverviewCard } from "./event-overview";
 import { EventDetailsEditable } from "./event-details-editable";
 import { Skeleton } from "../ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { ExpensesList } from "../budget/expenses-list";
 
 export const EventDetails = ({
   eventId,
@@ -46,16 +48,31 @@ export const EventDetails = ({
           allocatedBudget: Number(event.allocatedBudget) || 0,
         }}
       />
-      <EventDetailsEditable
-        event={{
-          ...event,
-          startTime: event.startTime!,
-          endTime: event.endTime!,
-          venue: event.venue || "",
-          venueAddress: event.venueAddress || "",
-        }}
-        weddingId={weddingId}
-      />
+      <Tabs defaultValue="details" className="mt-10">
+        <TabsList className="w-full">
+          <TabsTrigger value="details" className="w-full">
+            Event Details
+          </TabsTrigger>
+          <TabsTrigger value="expenses" className="w-full">
+            Event Expenses
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="details">
+          <EventDetailsEditable
+            event={{
+              ...event,
+              startTime: event.startTime!,
+              endTime: event.endTime!,
+              venue: event.venue || "",
+              venueAddress: event.venueAddress || "",
+            }}
+            weddingId={weddingId}
+          />
+        </TabsContent>
+        <TabsContent value="expenses">
+          <ExpensesList weddingId={weddingId} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
