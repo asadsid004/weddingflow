@@ -6,16 +6,26 @@ import {
   Cancel01Icon,
   Search01Icon,
   FilterIcon,
-  Add01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { AddGuestButton } from "./add-guest-button";
 
 interface GuestsFilterProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   onReset: () => void;
   hasActiveFilters: boolean;
-  onAddGuest: () => void;
+  weddingId: string;
+  onOptimisticAdd?: (guest: {
+    id: string;
+    weddingId: string;
+    name: string;
+    email: string;
+    phoneNumber: string;
+    plusOnes: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }) => void;
 }
 
 export function GuestsFilter({
@@ -23,7 +33,8 @@ export function GuestsFilter({
   setSearchQuery,
   onReset,
   hasActiveFilters,
-  onAddGuest,
+  weddingId,
+  onOptimisticAdd,
 }: GuestsFilterProps) {
   return (
     <div className="mb-8 flex flex-col items-center gap-4 sm:flex-row">
@@ -49,14 +60,7 @@ export function GuestsFilter({
           />
           Filter
         </Button>
-        <Button onClick={onAddGuest} className="px-4">
-          <HugeiconsIcon
-            icon={Add01Icon}
-            strokeWidth={2}
-            className="h-4 w-4 mr-2"
-          />
-          Add Guest
-        </Button>
+        <AddGuestButton weddingId={weddingId} onOptimisticAdd={onOptimisticAdd} />
         {hasActiveFilters && (
           <Button
             variant="ghost"

@@ -1,5 +1,6 @@
 import { SidebarInset } from "@/components/ui/sidebar";
 import { AppHeader } from "@/components/weddings/sidebar/app-header";
+import { GuestsList } from "@/components/guests/guests-list";
 
 export default async function GuestsPage({
   params,
@@ -20,7 +21,7 @@ export default async function GuestsPage({
             Add and manage your wedding guest list and invitations.
           </p>
         </div>
-        {/* Guest list component will go here */}
+        <GuestsList weddingId={weddingId} />
       </div>
     </SidebarInset>
   );
