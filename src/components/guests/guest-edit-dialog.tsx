@@ -292,7 +292,7 @@ export function GuestEditDialog({ guest, weddingId }: GuestEditDialogProps) {
                 </form.Field>
               </div>
 
-              <form.Field name="events" mode="array">
+              <form.Field name="events">
                 {(field) => {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid;
@@ -349,7 +349,7 @@ export function GuestEditDialog({ guest, weddingId }: GuestEditDialogProps) {
                                       checked={isSelected}
                                       onCheckedChange={(checked) => {
                                         const current = field.state.value;
-                                        if (checked) {
+                                        if (checked === true) {
                                           field.handleChange([
                                             ...current,
                                             {
