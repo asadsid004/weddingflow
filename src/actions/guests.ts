@@ -1,8 +1,8 @@
 "use server";
 
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "@/db/drizzle";
-import { guests, events } from "@/db/schema";
+import { guests } from "@/db/schema";
 import { isAuthenticated } from "@/lib/auth-helpers";
 
 export const getWeddingGuests = async (weddingId: string) => {
@@ -44,10 +44,20 @@ export const updateGuest = async (guestId: string, updates: {
     email?: string;
     phoneNumber?: number;
     plusOnes?: number;
+    events?: {
+        eventId: string;
+        rsvp: "pending" | "accepted" | "declined";
+    }[];
 }) => {
     await isAuthenticated();
 
-    await db.update(guests).set(updates).where(eq(guests.id, guestId));
+    const { phoneNumber, ...rest } = updates;
+    const formattedUpdates = {
+        ...rest,
+        ...(phoneNumber !== undefined && { phoneNumber: phoneNumber.toString() }),
+    };
+
+    await db.update(guests).set(formattedUpdates).where(eq(guests.id, guestId));
 
     return { success: true };
 };
@@ -70,67 +80,29 @@ export const deleteGuest = async (guestId: string) => {
     return { success: true };
 };
 
-// Event-Guest join table actions
-export const addGuestToEvent = async (eventId: string, guestId: string) => {
+export const updateEventGuestRsvp = async (
+    guestId: string,
+    eventId: string,
+    rsvp: 'pending' | 'accepted' | 'declined'
+) => {
     await isAuthenticated();
 
-    await db.insert(eventGuests).values({ eventId, guestId });
+    const [guest] = await db
+        .select({ events: guests.events })
+        .from(guests)
+        .where(eq(guests.id, guestId))
+        .limit(1);
 
-    return { success: true };
-};
+    if (!guest) throw new Error("Guest not found");
 
-export const removeGuestFromEvent = async (eventId: string, guestId: string) => {
-    await isAuthenticated();
-
-    await db.delete(eventGuests).where(and(
-        eq(eventGuests.eventId, eventId),
-        eq(eventGuests.guestId, guestId)
-    ));
-
-    return { success: true };
-};
-
-export const getGuestsForEvent = async (eventId: string) => {
-    await isAuthenticated();
-
-    return await db
-        .select({
-            id: guests.id,
-            name: guests.name,
-            email: guests.email,
-            phoneNumber: guests.phoneNumber,
-            plusOnes: guests.plusOnes,
-        })
-        .from(eventGuests)
-        .innerJoin(guests, eq(eventGuests.guestId, guests.id))
-        .where(eq(eventGuests.eventId, eventId));
-};
-
-export const updateEventGuestRsvp = async (eventId: string, guestId: string, rsvpStatus: 'pending' | 'accepted' | 'declined') => {
-    await isAuthenticated();
+    const updatedEvents = guest.events.map(e =>
+        e.eventId === eventId ? { ...e, rsvp } : e
+    );
 
     await db
-        .update(eventGuests)
-        .set({ rsvpStatus })
-        .where(and(
-            eq(eventGuests.eventId, eventId),
-            eq(eventGuests.guestId, guestId)
-        ));
+        .update(guests)
+        .set({ events: updatedEvents })
+        .where(eq(guests.id, guestId));
 
     return { success: true };
-};
-
-export const getGuestEvents = async (guestId: string) => {
-    await isAuthenticated();
-
-    return await db
-        .select({
-            id: events.id,
-            name: events.name,
-            date: events.date,
-            rsvpStatus: eventGuests.rsvpStatus,
-        })
-        .from(eventGuests)
-        .innerJoin(events, eq(eventGuests.eventId, events.id))
-        .where(eq(eventGuests.guestId, guestId));
 };

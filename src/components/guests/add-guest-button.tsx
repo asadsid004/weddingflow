@@ -30,8 +30,8 @@ export const AddGuestButton = ({ weddingId }: AddGuestButtonProps) => {
           Add Guest
         </Button>
       </ResponsiveDialogTrigger>
-      <ResponsiveDialogContent className="max-h-[calc(100vh-10rem)] overflow-y-auto sm:max-w-md">
-        <ResponsiveDialogHeader>
+      <ResponsiveDialogContent className="flex max-h-[90vh] flex-col sm:max-w-md">
+        <ResponsiveDialogHeader className="">
           <ResponsiveDialogTitle className="text-center text-lg font-semibold tracking-tight">
             Add Guest
           </ResponsiveDialogTitle>
@@ -39,7 +39,7 @@ export const AddGuestButton = ({ weddingId }: AddGuestButtonProps) => {
             Add a new guest to your wedding guest list
           </ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
-        <div className="py-4">
+        <div className="scrollbar-thin flex-1 overflow-y-auto p-4 sm:p-0">
           <AddGuestForm weddingId={weddingId} setOpen={setOpen} />
         </div>
       </ResponsiveDialogContent>

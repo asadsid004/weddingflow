@@ -2,6 +2,7 @@ import { SidebarInset } from "@/components/ui/sidebar";
 import { AppHeader } from "@/components/weddings/sidebar/app-header";
 import { AddGuestButton } from "@/components/guests/add-guest-button";
 import { GuestOverview } from "@/components/guests/guest-overview";
+import { GuestsList } from "@/components/guests/guests-list";
 
 export default async function GuestsPage({
   params,
@@ -13,7 +14,7 @@ export default async function GuestsPage({
   return (
     <SidebarInset>
       <AppHeader breadcrumbs={[{ label: "Guests" }]} />
-      <div className="mx-auto w-full max-w-7xl p-4">
+      <div className="mx-auto w-full max-w-7xl space-y-8 p-4">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-semibold tracking-tight">
             Manage Guests
@@ -21,6 +22,7 @@ export default async function GuestsPage({
           <AddGuestButton weddingId={weddingId} />
         </div>
         <GuestOverview weddingId={weddingId} />
+        <GuestsList weddingId={weddingId} />
       </div>
     </SidebarInset>
   );
