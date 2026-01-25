@@ -67,7 +67,7 @@ export const createTaskColumns = (
     header: "Task",
     cell: ({ row }) => (
       <div
-        className={`font-medium ${
+        className={`font-medium text-wrap ${
           row.original.completed ? "text-muted-foreground line-through" : ""
         }`}
       >
@@ -117,7 +117,7 @@ export const createTaskColumns = (
     accessorKey: "eventName",
     header: "Event",
     cell: ({ row }) => (
-      <div className="text-muted-foreground text-sm">
+      <div className="text-muted-foreground text-sm text-wrap">
         {row.getValue("eventName")}
       </div>
     ),
@@ -166,7 +166,7 @@ export const createTaskColumns = (
 
       return (
         <div
-          className={`text-sm ${
+          className={`text-sm text-wrap ${
             isOverdue
               ? "text-destructive font-semibold"
               : isDueSoon

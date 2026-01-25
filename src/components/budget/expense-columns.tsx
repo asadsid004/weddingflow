@@ -24,7 +24,7 @@ export const createExpenseColumns = (): ColumnDef<Expense>[] => [
     accessorKey: "description",
     header: "Description",
     cell: ({ row }) => (
-      <div className="font-medium">{row.getValue("description")}</div>
+      <div className="font-medium text-wrap">{row.getValue("description")}</div>
     ),
   },
   {
@@ -60,7 +60,7 @@ export const createExpenseColumns = (): ColumnDef<Expense>[] => [
     accessorKey: "eventName",
     header: "Event",
     cell: ({ row }) => (
-      <div className="text-muted-foreground text-sm">
+      <div className="text-muted-foreground text-sm text-wrap">
         {row.getValue("eventName")}
       </div>
     ),
