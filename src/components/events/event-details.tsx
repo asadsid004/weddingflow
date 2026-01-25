@@ -7,6 +7,7 @@ import { EventDetailsEditable } from "./event-details-editable";
 import { Skeleton } from "../ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ExpensesList } from "../budget/expenses-list";
+import { GuestsList } from "../guests/guests-list";
 
 export const EventDetails = ({
   eventId,
@@ -51,10 +52,13 @@ export const EventDetails = ({
       <Tabs defaultValue="details" className="mt-10">
         <TabsList className="w-full">
           <TabsTrigger value="details" className="w-full">
-            Event Details
+            Details
           </TabsTrigger>
           <TabsTrigger value="expenses" className="w-full">
-            Event Expenses
+            Expenses
+          </TabsTrigger>
+          <TabsTrigger value="guests" className="w-full">
+            Guests
           </TabsTrigger>
         </TabsList>
         <TabsContent value="details">
@@ -71,6 +75,9 @@ export const EventDetails = ({
         </TabsContent>
         <TabsContent value="expenses">
           <ExpensesList weddingId={weddingId} />
+        </TabsContent>
+        <TabsContent value="guests">
+          <GuestsList weddingId={weddingId} />
         </TabsContent>
       </Tabs>
     </div>

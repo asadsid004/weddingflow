@@ -106,3 +106,16 @@ export const updateEventGuestRsvp = async (
 
     return { success: true };
 };
+
+export const getEventGuests = async (weddingId: string, eventId: string) => {
+    await isAuthenticated();
+
+    const weddingGuests = await db
+        .select()
+        .from(guests)
+        .where(eq(guests.weddingId, weddingId));
+
+    return weddingGuests.filter((guest) =>
+        guest.events.some((e) => e.eventId === eventId)
+    );
+};

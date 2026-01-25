@@ -12,6 +12,7 @@ import { Card, CardContent } from "../ui/card";
 import { EventDeleteButton } from "./event-delete-button";
 import { useQuery } from "@tanstack/react-query";
 import { getExpensesByEventId } from "@/actions/budgets";
+import { GuestOverviewCard } from "../guests/guest-overview-card";
 
 export const EventOverviewCard = ({
   event,
@@ -60,7 +61,7 @@ export const EventOverviewCard = ({
         <EventDeleteButton eventId={event.id} weddingId={event.weddingId} />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {/* Event Details Card */}
         <Card className="rounded-md">
           <CardContent>
@@ -190,6 +191,9 @@ export const EventOverviewCard = ({
             </div>
           </CardContent>
         </Card>
+
+        {/* Guest Overview Card */}
+        <GuestOverviewCard weddingId={event.weddingId} eventId={event.id} />
       </div>
     </div>
   );
