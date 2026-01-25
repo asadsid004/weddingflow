@@ -17,30 +17,16 @@ import { Add01Icon } from "@hugeicons/core-free-icons";
 
 interface AddGuestButtonProps {
   weddingId: string;
-  onOptimisticAdd?: (guest: {
-    id: string;
-    weddingId: string;
-    name: string;
-    email: string;
-    phoneNumber: string;
-    plusOnes: number;
-    createdAt: Date;
-    updatedAt: Date;
-  }) => void;
 }
 
-export const AddGuestButton = ({ weddingId, onOptimisticAdd }: AddGuestButtonProps) => {
+export const AddGuestButton = ({ weddingId }: AddGuestButtonProps) => {
   const [open, setOpen] = useState(false);
-
-  const handleSuccess = () => {
-    setOpen(false);
-  };
 
   return (
     <ResponsiveDialog open={open} onOpenChange={setOpen}>
       <ResponsiveDialogTrigger asChild>
         <Button>
-          <HugeiconsIcon icon={Add01Icon} strokeWidth={2} className="mr-2" />
+          <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
           Add Guest
         </Button>
       </ResponsiveDialogTrigger>
@@ -53,7 +39,9 @@ export const AddGuestButton = ({ weddingId, onOptimisticAdd }: AddGuestButtonPro
             Add a new guest to your wedding guest list
           </ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
-        <AddGuestForm weddingId={weddingId} onSuccess={handleSuccess} onOptimisticAdd={onOptimisticAdd} />
+        <div className="py-4">
+          <AddGuestForm weddingId={weddingId} setOpen={setOpen} />
+        </div>
       </ResponsiveDialogContent>
     </ResponsiveDialog>
   );
