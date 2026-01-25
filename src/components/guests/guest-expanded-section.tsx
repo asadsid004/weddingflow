@@ -142,7 +142,7 @@ export function GuestExpandedSection({
                       }
                     />
                   </SelectTrigger>
-                  <SelectContent className="max-h-60">
+                  <SelectContent className="max-h-60 z-[10000]">
                     {availableEvents.map((e) => (
                       <SelectItem key={e.id} value={e.id}>
                         {e.name}

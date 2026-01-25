@@ -1,14 +1,22 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Cancel01Icon,
   Search01Icon,
-  FilterIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { AddGuestButton } from "./add-guest-button";
+import { getEvents } from "@/actions/events";
 
 interface GuestsFilterProps {
   searchQuery: string;
@@ -16,6 +24,8 @@ interface GuestsFilterProps {
   onReset: () => void;
   hasActiveFilters: boolean;
   weddingId: string;
+  selectedEvent: string;
+  setSelectedEvent: (event: string) => void;
   onOptimisticAdd?: (guest: {
     id: string;
     weddingId: string;
@@ -34,8 +44,14 @@ export function GuestsFilter({
   onReset,
   hasActiveFilters,
   weddingId,
+  selectedEvent,
+  setSelectedEvent,
   onOptimisticAdd,
 }: GuestsFilterProps) {
+  const { data: events, isLoading: isEventsLoading } = useQuery({
+    queryKey: ["events", weddingId],
+    queryFn: () => getEvents(weddingId),
+  });
   return (
     <div className="mb-8 flex flex-col items-center gap-4 sm:flex-row">
       <div className="relative w-full flex-1">
@@ -52,14 +68,19 @@ export function GuestsFilter({
         />
       </div>
       <div className="flex w-full gap-2 sm:w-auto">
-        <Button variant="outline" className="px-4">
-          <HugeiconsIcon
-            icon={FilterIcon}
-            strokeWidth={2}
-            className="h-4 w-4 mr-2"
-          />
-          Filter
-        </Button>
+        <Select value={selectedEvent} onValueChange={setSelectedEvent}>
+          <SelectTrigger className="w-full sm:w-48">
+            <SelectValue placeholder={isEventsLoading ? "Loading events..." : "All Events"} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Events</SelectItem>
+            {events?.map((event) => (
+              <SelectItem key={event.id} value={event.id}>
+                {event.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <AddGuestButton weddingId={weddingId} onOptimisticAdd={onOptimisticAdd} />
         {hasActiveFilters && (
           <Button

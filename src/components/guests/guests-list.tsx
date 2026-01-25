@@ -29,6 +29,7 @@ interface GuestEvent {
 export function GuestsList({ weddingId }: { weddingId: string }) {
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedEvent, setSelectedEvent] = useState("all");
 
   const { data: guests, isLoading } = useQuery({
     queryKey: ["guests", weddingId],
@@ -70,17 +71,25 @@ export function GuestsList({ weddingId }: { weddingId: string }) {
 
   const filteredGuests = useMemo(() => {
     const guestsToFilter = optimisticGuests;
-    return guestsToFilter.filter((guest) =>
-      guest.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      guest.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      guest.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [optimisticGuests, searchQuery]);
+    return guestsToFilter.filter((guest) => {
+      const matchesSearch =
+        guest.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        guest.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        guest.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase());
 
-  const hasActiveFilters = searchQuery !== "";
+      const matchesEvent =
+        selectedEvent === "all" ||
+        guestEventsMap?.[guest.id]?.some((event) => event.id === selectedEvent);
+
+      return matchesSearch && matchesEvent;
+    });
+  }, [optimisticGuests, searchQuery, selectedEvent, guestEventsMap]);
+
+  const hasActiveFilters = searchQuery !== "" || selectedEvent !== "all";
 
   const handleReset = () => {
     setSearchQuery("");
+    setSelectedEvent("all");
   };
 
   const handleOptimisticAdd = (newGuest: Guest) => {
@@ -120,6 +129,8 @@ export function GuestsList({ weddingId }: { weddingId: string }) {
         onReset={handleReset}
         hasActiveFilters={hasActiveFilters}
         weddingId={weddingId}
+        selectedEvent={selectedEvent}
+        setSelectedEvent={setSelectedEvent}
         onOptimisticAdd={handleOptimisticAdd}
       />
 
