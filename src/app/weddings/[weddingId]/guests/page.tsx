@@ -1,7 +1,7 @@
 import { SidebarInset } from "@/components/ui/sidebar";
 import { AppHeader } from "@/components/weddings/sidebar/app-header";
-import { GuestsList } from "@/components/guests/guests-list";
 import { AddGuestButton } from "@/components/guests/add-guest-button";
+import { GuestOverview } from "@/components/guests/guest-overview";
 
 export default async function GuestsPage({
   params,
@@ -20,7 +20,7 @@ export default async function GuestsPage({
           </h1>
           <AddGuestButton weddingId={weddingId} />
         </div>
-        <GuestsList weddingId={weddingId} />
+        <GuestOverview weddingId={weddingId} />
       </div>
     </SidebarInset>
   );

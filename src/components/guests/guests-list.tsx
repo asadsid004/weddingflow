@@ -13,7 +13,7 @@ interface Guest {
   weddingId: string;
   name: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber: number;
   plusOnes: number;
   createdAt: Date;
   updatedAt: Date;
@@ -23,7 +23,7 @@ interface GuestEvent {
   id: string;
   name: string;
   date: string;
-  rsvpStatus: 'pending' | 'accepted' | 'declined';
+  rsvpStatus: "pending" | "accepted" | "declined";
 }
 
 export function GuestsList({ weddingId }: { weddingId: string }) {
@@ -40,16 +40,16 @@ export function GuestsList({ weddingId }: { weddingId: string }) {
     queryKey: ["guestEvents", weddingId],
     queryFn: async () => {
       if (!guests) return {};
-      
+
       const eventsMap: Record<string, GuestEvent[]> = {};
-      
+
       const eventPromises = guests.map(async (guest) => {
         const events = await getGuestEvents(guest.id);
         const filteredEvents = events
-          .filter(event => event.rsvpStatus !== null)
-          .map(event => ({
+          .filter((event) => event.rsvpStatus !== null)
+          .map((event) => ({
             ...event,
-            rsvpStatus: event.rsvpStatus as 'pending' | 'accepted' | 'declined'
+            rsvpStatus: event.rsvpStatus as "pending" | "accepted" | "declined",
           }));
         return { guestId: guest.id, events: filteredEvents };
       });
@@ -66,7 +66,7 @@ export function GuestsList({ weddingId }: { weddingId: string }) {
 
   const [optimisticGuests, addOptimisticGuest] = useOptimistic(
     guests || [],
-    (currentGuests, newGuest: Guest) => [...currentGuests, newGuest]
+    (currentGuests, newGuest: Guest) => [...currentGuests, newGuest],
   );
 
   const filteredGuests = useMemo(() => {
@@ -137,9 +137,9 @@ export function GuestsList({ weddingId }: { weddingId: string }) {
       {filteredGuests && filteredGuests.length > 0 ? (
         <div className="space-y-2">
           {filteredGuests.map((guest) => (
-            <GuestItem 
-              key={guest.id} 
-              guest={guest} 
+            <GuestItem
+              key={guest.id}
+              guest={guest}
               weddingId={weddingId}
               additionalEvents={guestEventsMap?.[guest.id] || []}
             />
