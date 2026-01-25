@@ -119,7 +119,7 @@ export const AddTaskForm = ({
                     onChange={(e) =>
                       field.handleChange(new Date(e.target.value))
                     }
-                    max={new Date().toISOString().split("T")[0]}
+                    min={new Date().toISOString().split("T")[0]}
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </FieldSet>
