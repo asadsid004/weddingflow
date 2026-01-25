@@ -2,6 +2,8 @@ import React from "react";
 
 import { SidebarInset } from "@/components/ui/sidebar";
 import { AppHeader } from "@/components/weddings/sidebar/app-header";
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import { QuickStats } from "@/components/dashboard/quick-stats";
 
 const DashboardPage = async ({
   params,
@@ -13,8 +15,11 @@ const DashboardPage = async ({
   return (
     <SidebarInset>
       <AppHeader breadcrumbs={[{ label: "Dashboard" }]} />
-      <div className="mx-auto w-full max-w-7xl p-4">
-        <h1>Wedding: {weddingId}</h1>
+      <div className="mx-auto w-full max-w-7xl space-y-8 p-6">
+        <DashboardHeader weddingId={weddingId} />
+        <div className="space-y-4">
+          <QuickStats weddingId={weddingId} />
+        </div>
       </div>
     </SidebarInset>
   );
