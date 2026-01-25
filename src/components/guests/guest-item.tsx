@@ -136,20 +136,18 @@ export function GuestItem({
               <GuestDeleteDialog guest={guest} weddingId={weddingId} />
               
               {/* Expand/Collapse Icon */}
-              {additionalEvents.length > 0 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleToggleExpand}
-                  className="h-7 w-7 p-0"
-                >
-                  <HugeiconsIcon 
-                    icon={isExpanded ? ChevronUp : ChevronDown} 
-                    strokeWidth={2} 
-                    className="h-3.5 w-3.5" 
-                  />
-                </Button>
-              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleToggleExpand}
+                className="h-7 w-7 p-0"
+              >
+                <HugeiconsIcon 
+                  icon={isExpanded ? ChevronUp : ChevronDown} 
+                  strokeWidth={2} 
+                  className="h-3.5 w-3.5" 
+                />
+              </Button>
             </div>
           </div>
         </div>
@@ -194,20 +192,18 @@ export function GuestItem({
             <GuestDeleteDialog guest={guest} weddingId={weddingId} />
             
             {/* Expand/Collapse Icon */}
-            {additionalEvents.length > 0 && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleToggleExpand}
-                className="h-7 w-7 p-0 ml-1"
-              >
-                <HugeiconsIcon 
-                  icon={isExpanded ? ChevronUp : ChevronDown} 
-                  strokeWidth={2} 
-                  className="h-3.5 w-3.5" 
-                />
-              </Button>
-            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleToggleExpand}
+              className="h-7 w-7 p-0 ml-1"
+            >
+              <HugeiconsIcon 
+                icon={isExpanded ? ChevronUp : ChevronDown} 
+                strokeWidth={2} 
+                className="h-3.5 w-3.5" 
+              />
+            </Button>
           </div>
         </div>
       </div>
@@ -215,6 +211,8 @@ export function GuestItem({
       {/* Expanded Section */}
       {isExpanded && (
         <GuestExpandedSection
+          weddingId={weddingId}
+          guestId={guest.id}
           additionalEvents={additionalEvents}
           getRSVPStatusBadge={getRSVPStatusBadge}
         />
