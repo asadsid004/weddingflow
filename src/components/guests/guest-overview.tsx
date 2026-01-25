@@ -93,13 +93,25 @@ export const GuestOverview = ({ weddingId }: { weddingId: string }) => {
 
   const getRsvpStatus = (percentage: number) => {
     if (percentage === 100)
-      return { color: "text-green-600", label: "Fully Confirmed" };
+      return {
+        color: "text-green-600 dark:text-green-400",
+        label: "Fully Confirmed",
+      };
     if (percentage >= 75)
-      return { color: "text-blue-600", label: "Mostly Confirmed" };
+      return {
+        color: "text-blue-600 dark:text-blue-400",
+        label: "Mostly Confirmed",
+      };
     if (percentage >= 50)
-      return { color: "text-yellow-600", label: "Halfway There" };
+      return {
+        color: "text-yellow-600 dark:text-yellow-400",
+        label: "Halfway There",
+      };
     if (percentage >= 25)
-      return { color: "text-orange-600", label: "Response Started" };
+      return {
+        color: "text-orange-600 dark:text-orange-400",
+        label: "Response Started",
+      };
     return { color: "text-muted-foreground", label: "Waiting for Responses" };
   };
 
@@ -182,7 +194,7 @@ export const GuestOverview = ({ weddingId }: { weddingId: string }) => {
                 <p className="text-muted-foreground mb-1 text-sm">
                   Need Response
                 </p>
-                <p className="text-2xl font-bold text-orange-600">
+                <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
                   {totalInvitedIncludingPlusOnes - confirmedGuestsCount}
                 </p>
                 <p className="text-muted-foreground mt-1 text-xs">
@@ -256,15 +268,15 @@ export const GuestOverview = ({ weddingId }: { weddingId: string }) => {
                           {event.totalInvited} invited
                         </span>
                         <span className="hidden sm:inline">•</span>
-                        <span className="whitespace-nowrap text-green-600">
+                        <span className="whitespace-nowrap text-green-600 dark:text-green-400">
                           {event.accepted} accepted
                         </span>
                         <span className="hidden sm:inline">•</span>
-                        <span className="whitespace-nowrap text-orange-600">
+                        <span className="whitespace-nowrap text-orange-600 dark:text-orange-400">
                           {event.pending} pending
                         </span>
                         <span className="hidden sm:inline">•</span>
-                        <span className="whitespace-nowrap text-red-600">
+                        <span className="whitespace-nowrap text-red-600 dark:text-red-400">
                           {event.declined} declined
                         </span>
                       </div>

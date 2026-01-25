@@ -67,7 +67,7 @@ export const DashboardView = ({ weddingId }: DashboardViewProps) => {
         />
       </div>
 
-      <div className="max-w-2xl space-y-4">
+      <div className="space-y-4">
         <h2 className="text-xl font-bold tracking-tight">Recent Activity</h2>
         <RecentExpensesList
           weddingId={weddingId}

@@ -44,7 +44,7 @@ export const EventStatsCard = ({ total, nextEvent }: EventStatsProps) => {
             </div>
           </div>
           <div className="ml-4 shrink-0">
-            <div className="rounded-xl bg-orange-50 p-3 dark:bg-orange-950/30">
+            <div className="rounded-md bg-orange-100 p-3 dark:bg-orange-900">
               <HugeiconsIcon
                 icon={Calendar02Icon}
                 className="size-6 text-orange-600 dark:text-orange-400"

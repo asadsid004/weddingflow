@@ -51,7 +51,7 @@ export const BudgetStatsCard = ({
             </div>
           </div>
           <div className="ml-4 shrink-0">
-            <div className="rounded-xl bg-emerald-50 p-3 dark:bg-emerald-950/30">
+            <div className="rounded-md bg-emerald-100 p-3 dark:bg-emerald-900">
               <HugeiconsIcon
                 icon={Money01Icon}
                 className="size-6 text-emerald-600 dark:text-emerald-400"

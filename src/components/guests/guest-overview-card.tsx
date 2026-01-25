@@ -133,7 +133,7 @@ const Metric = ({
   value: React.ReactNode;
   icon: React.ReactNode;
 }) => (
-  <div className="bg-background">
+  <div>
     <div className="text-muted-foreground flex items-center gap-2 text-xs tracking-wide uppercase">
       {icon}
       <span>{label}</span>

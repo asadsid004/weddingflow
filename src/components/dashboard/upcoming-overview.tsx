@@ -5,9 +5,9 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Calendar02Icon,
   Task02Icon,
-  CircleIcon,
-  CheckmarkCircle02Icon,
   ArrowRight02Icon,
+  CheckmarkSquare02Icon,
+  SquareIcon,
 } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -194,7 +194,7 @@ export const UpcomingOverview = ({
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <div className="bg-muted mb-3 rounded-md p-3">
                 <HugeiconsIcon
-                  icon={CheckmarkCircle02Icon}
+                  icon={CheckmarkSquare02Icon}
                   className="text-muted-foreground h-8 w-8"
                 />
               </div>
@@ -222,14 +222,10 @@ export const UpcomingOverview = ({
                         completed: !task.completed,
                       })
                     }
-                    className={`shrink-0 transition-colors ${
-                      task.completed
-                        ? "text-green-600"
-                        : "text-muted-foreground hover:text-primary"
-                    }`}
+                    className="shrink-0"
                   >
                     <HugeiconsIcon
-                      icon={task.completed ? CheckmarkCircle02Icon : CircleIcon}
+                      icon={task.completed ? CheckmarkSquare02Icon : SquareIcon}
                       className="h-5 w-5"
                       strokeWidth={task.completed ? 2.5 : 2}
                     />

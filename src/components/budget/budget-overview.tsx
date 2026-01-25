@@ -99,25 +99,25 @@ export const BudgetOverview = ({ weddingId }: { weddingId: string }) => {
   const getBudgetStatus = (percentage: number) => {
     if (percentage > 100)
       return {
-        color: "text-red-600",
-        bgColor: "bg-red-50",
+        color: "text-red-600 dark:text-red-400",
+        bgColor: "bg-red-50 dark:bg-red-900",
         label: "Over Budget",
       };
     if (percentage > 90)
       return {
-        color: "text-orange-600",
-        bgColor: "bg-orange-50",
+        color: "text-orange-600 dark:text-orange-400",
+        bgColor: "bg-orange-50 dark:bg-orange-900",
         label: "Warning",
       };
     if (percentage > 80)
       return {
-        color: "text-yellow-600",
-        bgColor: "bg-yellow-50",
+        color: "text-yellow-600 dark:text-yellow-400",
+        bgColor: "bg-yellow-50 dark:bg-yellow-900",
         label: "Caution",
       };
     return {
-      color: "text-green-600",
-      bgColor: "bg-green-50",
+      color: "text-green-600 dark:text-green-400",
+      bgColor: "bg-green-50 dark:bg-green-900",
       label: "On Track",
     };
   };
@@ -254,13 +254,13 @@ export const BudgetOverview = ({ weddingId }: { weddingId: string }) => {
                       </span>
                       <span className="hidden sm:inline">•</span>
                       <span
-                        className={`whitespace-nowrap ${event.isOverBudget ? "font-medium text-red-600" : ""}`}
+                        className={`whitespace-nowrap ${event.isOverBudget ? "font-medium text-red-600 dark:text-red-400" : ""}`}
                       >
                         ₹{event.spent.toLocaleString()} L spent
                       </span>
                       <span className="hidden sm:inline">•</span>
                       <span
-                        className={`whitespace-nowrap ${event.remaining < 0 ? "font-medium text-red-600" : "text-green-600"}`}
+                        className={`whitespace-nowrap ${event.remaining < 0 ? "font-medium text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`}
                       >
                         ₹{Math.abs(event.remaining).toLocaleString()} L{" "}
                         {event.remaining < 0 ? "over" : "left"}

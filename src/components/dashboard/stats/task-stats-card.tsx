@@ -49,7 +49,7 @@ export const TaskStatsCard = ({
             </div>
           </div>
           <div className="ml-4 shrink-0">
-            <div className="rounded-xl bg-purple-50 p-3 dark:bg-purple-950/30">
+            <div className="rounded-md bg-purple-100 p-3 dark:bg-purple-900">
               <HugeiconsIcon
                 icon={Task02Icon}
                 className="size-6 text-purple-600 dark:text-purple-400"

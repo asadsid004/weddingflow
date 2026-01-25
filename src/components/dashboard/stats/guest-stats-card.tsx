@@ -40,7 +40,7 @@ export const GuestStatsCard = ({
             </div>
           </div>
           <div className="ml-4 shrink-0">
-            <div className="rounded-xl bg-blue-50 p-3 dark:bg-blue-950/30">
+            <div className="rounded-md bg-blue-100 p-3 dark:bg-blue-900">
               <HugeiconsIcon
                 icon={UserGroupIcon}
                 className="size-6 text-blue-600 dark:text-blue-400"

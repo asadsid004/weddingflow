@@ -81,7 +81,7 @@ export const RecentExpensesList = ({
         </div>
 
         {expenses.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-8 text-center">
+          <div className="flex flex-col items-center justify-center rounded-md border border-dashed py-8 text-center">
             <div className="bg-muted mb-3 rounded-full p-3">
               <HugeiconsIcon
                 icon={Money01Icon}
