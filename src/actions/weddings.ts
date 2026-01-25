@@ -77,3 +77,46 @@ export const increaseTotalBudget = async ({
         totalBudget: totalBudget.toFixed(2),
     }).where(eq(weddings.id, weddingId));
 }
+
+export const updateWedding = async ({
+    weddingId,
+    name,
+    brideName,
+    groomName,
+    weddingDate,
+    totalBudget,
+}: {
+    weddingId: string;
+    name: string;
+    brideName: string;
+    groomName: string;
+    weddingDate: Date;
+    totalBudget: number;
+}) => {
+    await isAuthenticated();
+
+    const [wedding] = await db.select().from(weddings).where(eq(weddings.id, weddingId));
+
+    if (!wedding) {
+        throw new Error("Wedding not found");
+    }
+
+    await db.update(weddings).set({
+        name,
+        brideName,
+        groomName,
+        weddingDate: weddingDate.toISOString().split('T')[0],
+        totalBudget: totalBudget.toFixed(2),
+    }).where(eq(weddings.id, weddingId));
+}
+
+
+export const deleteWedding = async (weddingId: string) => {
+    await isAuthenticated();
+
+    const result = await db.delete(weddings).where(eq(weddings.id, weddingId));
+
+    if (result.rowCount === 0) {
+        throw new Error("Wedding not found");
+    }
+}
