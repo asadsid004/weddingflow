@@ -2,7 +2,7 @@
 
 import { eq, and } from "drizzle-orm";
 import { db } from "@/db/drizzle";
-import { guests, eventGuests } from "@/db/schema";
+import { guests, eventGuests, events, weddings } from "@/db/schema";
 import { isAuthenticated } from "@/lib/auth-helpers";
 
 export const getWeddingGuests = async (weddingId: string) => {
@@ -31,7 +31,35 @@ export const createGuest = async (weddingId: string, guest: {
         throw new Error("Failed to create guest");
     }
 
-    return result[0].id;
+    const newGuestId = result[0].id;
+
+    const [wedding] = await db
+        .select({ weddingDate: weddings.weddingDate })
+        .from(weddings)
+        .where(eq(weddings.id, weddingId))
+        .limit(1);
+
+    if (wedding) {
+        const [mainEvent] = await db
+            .select({ id: events.id })
+            .from(events)
+            .where(and(
+                eq(events.weddingId, weddingId),
+                eq(events.date, wedding.weddingDate)
+            ))
+            .limit(1);
+
+        // If main wedding event exists, add guest to it
+        if (mainEvent) {
+            await db.insert(eventGuests).values({
+                eventId: mainEvent.id,
+                guestId: newGuestId,
+                rsvpStatus: 'pending', 
+            });
+        }
+    }
+
+    return newGuestId;
 };
 
 export const updateGuest = async (guestId: string, updates: {
@@ -113,6 +141,21 @@ export const updateEventGuestRsvp = async (eventId: string, guestId: string, rsv
         ));
 
     return { success: true };
+};
+
+export const getGuestEvents = async (guestId: string) => {
+    await isAuthenticated();
+
+    return await db
+        .select({
+            id: events.id,
+            name: events.name,
+            date: events.date,
+            rsvpStatus: eventGuests.rsvpStatus,
+        })
+        .from(eventGuests)
+        .innerJoin(events, eq(eventGuests.eventId, events.id))
+        .where(eq(eventGuests.guestId, guestId));
 };
 
 export const toggleEventGuestAttendance = async (eventId: string, guestId: string) => {

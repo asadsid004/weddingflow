@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useOptimistic, startTransition } from "react";
-import { getWeddingGuests } from "@/actions/guests";
+import { getWeddingGuests, getGuestEvents } from "@/actions/guests";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { GuestsFilter } from "./guests-filter";
@@ -19,6 +19,13 @@ interface Guest {
   updatedAt: Date;
 }
 
+interface GuestEvent {
+  id: string;
+  name: string;
+  date: string;
+  rsvpStatus: 'pending' | 'accepted' | 'declined';
+}
+
 export function GuestsList({ weddingId }: { weddingId: string }) {
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,6 +33,34 @@ export function GuestsList({ weddingId }: { weddingId: string }) {
   const { data: guests, isLoading } = useQuery({
     queryKey: ["guests", weddingId],
     queryFn: () => getWeddingGuests(weddingId),
+  });
+
+  const { data: guestEventsMap } = useQuery({
+    queryKey: ["guestEvents", weddingId],
+    queryFn: async () => {
+      if (!guests) return {};
+      
+      const eventsMap: Record<string, GuestEvent[]> = {};
+      
+      const eventPromises = guests.map(async (guest) => {
+        const events = await getGuestEvents(guest.id);
+        const filteredEvents = events
+          .filter(event => event.rsvpStatus !== null)
+          .map(event => ({
+            ...event,
+            rsvpStatus: event.rsvpStatus as 'pending' | 'accepted' | 'declined'
+          }));
+        return { guestId: guest.id, events: filteredEvents };
+      });
+
+      const results = await Promise.all(eventPromises);
+      results.forEach(({ guestId, events }) => {
+        eventsMap[guestId] = events;
+      });
+
+      return eventsMap;
+    },
+    enabled: !!guests && guests.length > 0,
   });
 
   const [optimisticGuests, addOptimisticGuest] = useOptimistic(
@@ -78,7 +113,7 @@ export function GuestsList({ weddingId }: { weddingId: string }) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="my-6 space-y-4">
       <GuestsFilter
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -91,7 +126,17 @@ export function GuestsList({ weddingId }: { weddingId: string }) {
       {filteredGuests && filteredGuests.length > 0 ? (
         <div className="space-y-2">
           {filteredGuests.map((guest) => (
-            <GuestItem key={guest.id} guest={guest} weddingId={weddingId} />
+            <GuestItem 
+              key={guest.id} 
+              guest={guest} 
+              weddingId={weddingId}
+              mainWeddingEvent={{
+                id: 'main-wedding',
+                name: 'Main Wedding',
+                rsvpStatus: 'pending' 
+              }}
+              additionalEvents={guestEventsMap?.[guest.id] || []}
+            />
           ))}
         </div>
       ) : (
