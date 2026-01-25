@@ -1,5 +1,6 @@
 import { AddTaskButton } from "@/components/tasks/add-task-button";
 import { TasksOverview } from "@/components/tasks/task-overview";
+import { TasksList } from "@/components/tasks/tasks-list";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { AppHeader } from "@/components/weddings/sidebar/app-header";
 import React from "react";
@@ -20,6 +21,7 @@ const TasksPage = async ({
           <AddTaskButton weddingId={weddingId} />
         </div>
         <TasksOverview weddingId={weddingId} />
+        <TasksList weddingId={weddingId} />
       </div>
     </SidebarInset>
   );

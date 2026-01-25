@@ -1,5 +1,6 @@
 "use server";
 
+import { Task } from "@/components/tasks/task-columns";
 import { db } from "@/db/drizzle";
 import { events, weddings } from "@/db/schema";
 import { tasks } from "@/db/schemas/tasks-schema";
@@ -70,3 +71,29 @@ export const getTasks = async (weddingId: string) => {
 
     return allTasks;
 }
+
+export const updateTask = async (taskId: string, data: Partial<Task>) => {
+    await isAuthenticated();
+
+    const [updatedTask] = await db.update(tasks).set(data).where(eq(tasks.id, taskId)).returning();
+
+    if (!updatedTask) {
+        throw new Error("Failed to update task");
+    }
+
+    return updatedTask;
+}
+
+export const deleteTask = async (taskId: string) => {
+    await isAuthenticated();
+
+    const task = await db.query.tasks.findFirst({
+        where: eq(tasks.id, taskId),
+    });
+
+    if (!task) {
+        throw new Error("Task not found or unauthorized");
+    }
+
+    await db.delete(tasks).where(eq(tasks.id, taskId));
+};
