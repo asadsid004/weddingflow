@@ -113,29 +113,24 @@ export function GuestItem({
           {/* Guest Name and Plus Ones */}
           <div className="flex items-center justify-between">
             <p className="font-medium text-sm truncate flex-1">{guest.name}</p>
-            <div className="flex items-center gap-2 ml-2">
-              <div className="flex items-center gap-1">
-                <HugeiconsIcon icon={UserMultiple02Icon} strokeWidth={2} className="h-3 w-3 text-muted-foreground" />
-                <p className="text-xs">{guest.plusOnes}</p>
-              </div>
-              {getRSVPStatusBadge('pending')}
-            </div>
-          </div>
-          
-          {/* Contact Info */}
-          <div className="text-xs text-muted-foreground space-y-1">
-            <div className="flex items-center gap-2">
-              <HugeiconsIcon icon={Mail01Icon} strokeWidth={2} className="h-3 w-3" />
-              <p>{guest.email}</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <HugeiconsIcon icon={PhoneCall} strokeWidth={2} className="h-3 w-3" />
-              <p>{guest.phoneNumber}</p>
+            <div className="flex items-center gap-1">
+              <HugeiconsIcon icon={UserMultiple02Icon} strokeWidth={2} className="h-3 w-3 text-muted-foreground" />
+              <p className="text-xs">{guest.plusOnes}</p>
             </div>
           </div>
           
           {/* Action Buttons */}
-          <div className="flex items-center justify-end pt-1">
+          <div className="flex items-center justify-between pt-2">
+            <div className="text-xs text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <HugeiconsIcon icon={Mail01Icon} strokeWidth={2} className="h-3 w-3" />
+                <p>{guest.email}</p>
+              </div>
+              <div className="flex items-center gap-2 mt-1">
+                <HugeiconsIcon icon={PhoneCall} strokeWidth={2} className="h-3 w-3" />
+                <p>{guest.phoneNumber}</p>
+              </div>
+            </div>
             <div className="flex items-center gap-1">
               <GuestEditDialog guest={guest} weddingId={weddingId} />
               <GuestDeleteDialog guest={guest} weddingId={weddingId} />
@@ -146,7 +141,7 @@ export function GuestItem({
                   variant="ghost"
                   size="sm"
                   onClick={handleToggleExpand}
-                  className="h-7 w-7 p-0 ml-1"
+                  className="h-7 w-7 p-0"
                 >
                   <HugeiconsIcon 
                     icon={isExpanded ? ChevronUp : ChevronDown} 
