@@ -3,7 +3,7 @@ import React from "react";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { AppHeader } from "@/components/weddings/sidebar/app-header";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import { QuickStats } from "@/components/dashboard/quick-stats";
+import { DashboardView } from "@/components/dashboard/dashboard-view";
 
 const DashboardPage = async ({
   params,
@@ -17,9 +17,7 @@ const DashboardPage = async ({
       <AppHeader breadcrumbs={[{ label: "Dashboard" }]} />
       <div className="mx-auto w-full max-w-7xl space-y-8 p-6">
         <DashboardHeader weddingId={weddingId} />
-        <div className="space-y-4">
-          <QuickStats weddingId={weddingId} />
-        </div>
+        <DashboardView weddingId={weddingId} />
       </div>
     </SidebarInset>
   );

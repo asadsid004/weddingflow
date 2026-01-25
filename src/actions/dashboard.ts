@@ -68,7 +68,39 @@ export const getDashboardStats = async (weddingId: string) => {
         .orderBy(events.date);
 
     const totalEvents = allEvents.length;
-    const nextEvent = allEvents.find(e => new Date(e.date) >= now);
+    const upcomingEvents = allEvents
+        .filter(e => new Date(e.date) >= now)
+        .slice(0, 3);
+    const nextEvent = upcomingEvents[0] || null;
+
+    // 5. Recent Expenses
+    const recentExpenses = await db
+        .select()
+        .from(expenses)
+        .where(eq(expenses.weddingId, weddingId))
+        .orderBy(expenses.createdAt)
+        .limit(5);
+
+    // 6. Generate Smart Alerts
+    const alerts = [];
+
+    if (totalBudget > 0 && spentBudget > totalBudget) {
+        alerts.push({
+            type: 'warning',
+            message: `You are ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(spentBudget - totalBudget)} over budget.`,
+            category: 'budget'
+        });
+    }
+
+    if (overdueTasks > 0) {
+        alerts.push({
+            type: 'destructive',
+            message: `You have ${overdueTasks} overdue tasks that need attention.`,
+            category: 'tasks'
+        });
+    }
+
+    const pendingRSVPs = allGuests.filter(g => g.events.some(e => e.rsvp === 'pending')).length;
 
     return {
         guests: {
@@ -76,6 +108,7 @@ export const getDashboardStats = async (weddingId: string) => {
             accepted: acceptedPeople,
             pending: pendingPeople,
             declined: declinedPeople,
+            pendingRSVPsCount: pendingRSVPs,
         },
         budget: {
             total: totalBudget,
@@ -88,13 +121,32 @@ export const getDashboardStats = async (weddingId: string) => {
             completed: completedTasks,
             overdue: overdueTasks,
             percentDone: totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0,
+            priorityTasks: allTasks
+                .filter(t => !t.completed)
+                .sort((a, b) => {
+                    // Priority sorting: Overdue first, then by date
+                    const aOverdue = new Date(a.dueDate) < now;
+                    const bOverdue = new Date(b.dueDate) < now;
+                    if (aOverdue && !bOverdue) return -1;
+                    if (!aOverdue && bOverdue) return 1;
+                    return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+                })
+                .slice(0, 5),
         },
         events: {
             total: totalEvents,
+            upcoming: upcomingEvents,
             nextEvent: nextEvent ? {
                 name: nextEvent.name,
                 date: nextEvent.date,
             } : null,
-        }
+        },
+        recentExpenses: recentExpenses.map(e => ({
+            id: e.id,
+            description: e.description,
+            amount: Number(e.amount),
+            date: e.date,
+        })),
+        alerts,
     };
 };

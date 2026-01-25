@@ -8,7 +8,11 @@ import { TaskStatsCard } from "./stats/task-stats-card";
 import { EventStatsCard } from "./stats/event-stats-card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const QuickStats = ({ weddingId }: { weddingId: string }) => {
+interface QuickStatsProps {
+  weddingId: string;
+}
+
+export const QuickStats = ({ weddingId }: QuickStatsProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["dashboard-stats", weddingId],
     queryFn: () => getDashboardStats(weddingId),
@@ -16,18 +20,18 @@ export const QuickStats = ({ weddingId }: { weddingId: string }) => {
 
   if (isLoading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <>
         {[...Array(4)].map((_, i) => (
           <Skeleton key={i} className="h-40 w-full rounded-xl" />
         ))}
-      </div>
+      </>
     );
   }
 
   if (!data) return null;
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <>
       <GuestStatsCard
         total={data.guests.total}
         accepted={data.guests.accepted}
@@ -48,6 +52,6 @@ export const QuickStats = ({ weddingId }: { weddingId: string }) => {
         total={data.events.total}
         nextEvent={data.events.nextEvent}
       />
-    </div>
+    </>
   );
 };
