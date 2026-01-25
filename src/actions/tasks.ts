@@ -60,3 +60,13 @@ export const createTask = async ({
 
     return newTask;
 }
+
+export const getTasks = async (weddingId: string) => {
+    await isAuthenticated();
+
+    const allTasks = await db.query.tasks.findMany({
+        where: eq(tasks.weddingId, weddingId),
+    });
+
+    return allTasks;
+}
