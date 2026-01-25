@@ -75,20 +75,20 @@ export function GuestExpandedSection({
       setOpen(false);
       setSelectedEventId("");
       await queryClient.invalidateQueries({ queryKey: ["guestEvents", weddingId] });
-    } catch (err) {
+    } catch {
       toast.error("Failed to add guest to event");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleRemove = async (eventId: string, eventName: string) => {
+  const handleRemove = async (eventId: string) => {
     setIsSubmitting(true);
     try {
       await removeGuestFromEvent(eventId, guestId);
       toast.success("Guest removed from event");
       await queryClient.invalidateQueries({ queryKey: ["guestEvents", weddingId] });
-    } catch (err) {
+    } catch {
       toast.error("Failed to remove guest from event");
     } finally {
       setIsSubmitting(false);
@@ -192,9 +192,8 @@ export function GuestExpandedSection({
                 </span>
                 {getRSVPStatusBadge(event.rsvpStatus)}
                 <RemoveFromEventDialog
-                  eventId={event.id}
                   eventName={event.name}
-                  onRemove={() => handleRemove(event.id, event.name)}
+                  onRemove={() => handleRemove(event.id)}
                   disabled={isSubmitting}
                 />
               </div>
@@ -207,12 +206,10 @@ export function GuestExpandedSection({
 }
 
 function RemoveFromEventDialog({
-  eventId,
   eventName,
   onRemove,
   disabled,
 }: {
-  eventId: string;
   eventName: string;
   onRemove: () => void;
   disabled?: boolean;
@@ -237,7 +234,7 @@ function RemoveFromEventDialog({
             Remove from Event
           </ResponsiveDialogTitle>
           <ResponsiveDialogDescription className="text-center">
-            Are you sure you want to remove this guest from "{eventName}"?
+            Are you sure you want to remove this guest from &ldquo;{eventName}&rdquo;?
           </ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
 

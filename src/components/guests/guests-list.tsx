@@ -141,11 +141,6 @@ export function GuestsList({ weddingId }: { weddingId: string }) {
               key={guest.id} 
               guest={guest} 
               weddingId={weddingId}
-              mainWeddingEvent={{
-                id: 'main-wedding',
-                name: 'Main Wedding',
-                rsvpStatus: 'pending' 
-              }}
               additionalEvents={guestEventsMap?.[guest.id] || []}
             />
           ))}

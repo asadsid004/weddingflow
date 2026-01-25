@@ -35,67 +35,16 @@ interface GuestEvent {
 interface GuestItemProps {
   guest: Guest;
   weddingId: string;
-  mainWeddingEvent?: GuestEvent;
   additionalEvents?: GuestEvent[];
 }
 
 export function GuestItem({ 
   guest, 
   weddingId, 
-  mainWeddingEvent,
   additionalEvents = [] 
 }: GuestItemProps) {
-  const queryClient = useQueryClient();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [showEditDialog, setShowEditDialog] = useState(false);
-
-  const [optimisticGuests, addOptimisticGuest] = useOptimistic(
-    { guests: [], guestId: "" },
-    (state, newGuestId: string) => ({
-      guests: state.guests.filter((g: Guest) => g.id !== newGuestId),
-      guestId: newGuestId,
-    })
-  );
-
-  const handleDelete = async () => {
-    setShowDeleteDialog(true);
-  };
-
-  const confirmDelete = async () => {
-    startTransition(() => {
-      setIsDeleting(true);
-      addOptimisticGuest(guest.id);
-    });
-
-    try {
-      await deleteGuest(guest.id);
-      toast.success("Guest deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["guests", weddingId] });
-      setShowDeleteDialog(false);
-    } catch (error) {
-      toast.error("Failed to delete guest");
-      setIsDeleting(false);
-      setShowDeleteDialog(false);
-    }
-  };
-
-  const handleEdit = async (updatedGuest: {
-    name: string;
-    email: string;
-    phoneNumber: string;
-    plusOnes: number;
-  }) => {
-    try {
-      await updateGuest(guest.id, updatedGuest);
-      toast.success("Guest updated successfully");
-      queryClient.invalidateQueries({ queryKey: ["guests", weddingId] });
-      setShowEditDialog(false);
-    } catch (error) {
-      toast.error("Failed to update guest");
-    }
-  };
 
   const handleToggleExpand = () => {
     setIsExpanded(!isExpanded);
