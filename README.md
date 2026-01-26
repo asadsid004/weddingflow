@@ -2,15 +2,15 @@
 
 **Plan Your Wedding. Without the Chaos.**
 
-WeddingFlow is a modern, high-performance wedding management platform designed to help couples plan their big day without the chaos. From guest lists to vendor tracking, manage every detail of your wedding in one elegant and intuitive interface.
+WeddingFlow is a modern, high-performance wedding management platform designed to help couples plan their big day without the chaos. From guest lists to budget tracking, manage your wedding in one elegant and intuitive interface.
 
 ## ✨ Features
 
-- **Guest Management**: Keep track of RSVPs, dietary requirements, and seating arrangements.
-- **Event Planning**: Organize multiple events like the rehearsal dinner, ceremony, and reception.
-- **Vendor Tracking**: Store contracts, contact info, and payment statuses for all your vendors.
-- **Task & Budget**: Stay on top of your to-do list and monitor your spending in real-time.
-- **Modern Responsive UI**: Fully optimized for both desktop and mobile using a custom responsive component system.
+- **Guest Management**: Keep track of guest lists, plus-ones, and RSVP statuses.
+- **Event Planning**: Organize multiple wedding events like ceremonies and receptions with specific venues and dates.
+- **Vendor Directory**: Browse available vendors and keep track of their contact details.
+- **Task & Budget**: Stay on top of your tasks and monitor your spending across different wedding events.
+- **Modern Responsive UI**: Fully optimized for both desktop and mobile using a custom design system.
 
 ## 🚀 Tech Stack
 
