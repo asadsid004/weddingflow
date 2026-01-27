@@ -52,6 +52,8 @@ export const createWedding = async ({
         userId: session.user.id,
         name: "Wedding Ceremony",
         date: weddingDate.toISOString().split('T')[0],
+        startTime: "07:00 PM",
+        endTime: "11:00 PM",
     });
 
     await db
