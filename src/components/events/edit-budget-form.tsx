@@ -61,6 +61,9 @@ export const EditBudgetForm = ({
       queryClient.invalidateQueries({
         queryKey: ["events", weddingId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["event", eventId],
+      });
       toast.success("Budget updated successfully");
     },
     onError: () => {

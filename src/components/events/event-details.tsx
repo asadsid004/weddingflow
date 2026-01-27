@@ -74,7 +74,7 @@ export const EventDetails = ({
           />
         </TabsContent>
         <TabsContent value="expenses">
-          <ExpensesList weddingId={weddingId} />
+          <ExpensesList weddingId={weddingId} eventId={eventId} />
         </TabsContent>
         <TabsContent value="guests">
           <GuestsList weddingId={weddingId} />

@@ -8,7 +8,13 @@ import { createExpenseColumns, Expense } from "./expense-columns";
 import { AddExpenseButton } from "./add-expense-button";
 import { Skeleton } from "../ui/skeleton";
 
-export const ExpensesList = ({ weddingId }: { weddingId: string }) => {
+export const ExpensesList = ({
+  weddingId,
+  eventId,
+}: {
+  weddingId: string;
+  eventId?: string;
+}) => {
   const { data: expenses, isLoading: expensesLoading } = useQuery({
     queryKey: ["expenses", weddingId],
     queryFn: () => getExpenses(weddingId),
@@ -61,12 +67,13 @@ export const ExpensesList = ({ weddingId }: { weddingId: string }) => {
             Manage and track all your wedding expenses
           </p>
         </div>
-        <AddExpenseButton weddingId={weddingId} />
+        <AddExpenseButton weddingId={weddingId} initialEventId={eventId} />
       </div>
 
       <ExpenseTable
         columns={columns}
         data={expensesWithEventNames}
+        eventId={eventId}
         events={events?.map((e) => ({ id: e.id, name: e.name }))}
       />
     </div>

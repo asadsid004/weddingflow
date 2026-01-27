@@ -13,7 +13,13 @@ import {
 import { PlusSignIcon } from "@hugeicons/core-free-icons";
 import { AddExpenseForm } from "./add-expense-form";
 
-export const AddExpenseButton = ({ weddingId }: { weddingId: string }) => {
+export const AddExpenseButton = ({
+  weddingId,
+  initialEventId,
+}: {
+  weddingId: string;
+  initialEventId?: string;
+}) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -34,7 +40,11 @@ export const AddExpenseButton = ({ weddingId }: { weddingId: string }) => {
           </p>
         </ResponsiveDialogHeader>
         <div className="py-4">
-          <AddExpenseForm weddingId={weddingId} setOpen={setOpen} />
+          <AddExpenseForm
+            weddingId={weddingId}
+            setOpen={setOpen}
+            initialEventId={initialEventId}
+          />
         </div>
       </ResponsiveDialogContent>
     </ResponsiveDialog>

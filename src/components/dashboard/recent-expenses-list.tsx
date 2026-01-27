@@ -121,7 +121,7 @@ export const RecentExpensesList = ({
                 </div>
                 <div className="ml-3 shrink-0">
                   <p className="text-destructive text-sm font-bold">
-                    {formatCurrency(expense.amount)}
+                    {formatCurrency(expense.amount)} L
                   </p>
                 </div>
               </div>

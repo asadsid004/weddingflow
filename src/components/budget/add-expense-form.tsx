@@ -30,16 +30,18 @@ const expenseSchema = z.object({
 export const AddExpenseForm = ({
   weddingId,
   setOpen,
+  initialEventId,
 }: {
   weddingId: string;
   setOpen: (open: boolean) => void;
+  initialEventId?: string;
 }) => {
   const form = useForm({
     defaultValues: {
       description: "",
       amount: "",
       date: new Date(),
-      eventId: "",
+      eventId: initialEventId || "",
     },
     validators: {
       onSubmit: expenseSchema,
@@ -66,6 +68,11 @@ export const AddExpenseForm = ({
       queryClient.invalidateQueries({
         queryKey: ["expenses", weddingId],
       });
+      if (initialEventId) {
+        queryClient.invalidateQueries({
+          queryKey: ["expenses", initialEventId, weddingId],
+        });
+      }
     },
     onError: () => {
       toast.error("Failed to add expense");

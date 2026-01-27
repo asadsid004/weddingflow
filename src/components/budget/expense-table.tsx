@@ -34,15 +34,19 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   events?: Array<{ id: string; name: string }>;
+  eventId?: string;
 }
 
 export function ExpenseTable<TData, TValue>({
   columns,
   data,
   events = [],
+  eventId,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+    eventId ? [{ id: "eventId", value: eventId }] : [],
+  );
   const [globalFilter, setGlobalFilter] = useState("");
 
   // eslint-disable-next-line react-hooks/incompatible-library
@@ -59,6 +63,9 @@ export function ExpenseTable<TData, TValue>({
       sorting,
       columnFilters,
       globalFilter,
+      columnVisibility: {
+        eventId: false,
+      },
     },
   });
 
@@ -81,12 +88,11 @@ export function ExpenseTable<TData, TValue>({
         <div className="flex w-auto min-w-[200px] items-center gap-2">
           <Select
             value={
-              (table.getColumn("eventName")?.getFilterValue() as string) ??
-              "all"
+              (table.getColumn("eventId")?.getFilterValue() as string) || "all"
             }
             onValueChange={(value) =>
               table
-                .getColumn("eventName")
+                .getColumn("eventId")
                 ?.setFilterValue(value === "all" ? "" : value)
             }
           >
@@ -96,7 +102,7 @@ export function ExpenseTable<TData, TValue>({
             <SelectContent>
               <SelectItem value="all">All Events</SelectItem>
               {events.map((event) => (
-                <SelectItem key={event.id} value={event.name}>
+                <SelectItem key={event.id} value={event.id}>
                   {event.name}
                 </SelectItem>
               ))}

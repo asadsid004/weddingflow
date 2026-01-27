@@ -61,9 +61,15 @@ export const createExpenseColumns = (): ColumnDef<Expense>[] => [
     header: "Event",
     cell: ({ row }) => (
       <div className="text-muted-foreground text-sm text-wrap">
-        {row.getValue("eventName")}
+        {row.original.eventName}
       </div>
     ),
+  },
+  {
+    accessorKey: "eventId",
+    header: () => null,
+    cell: () => null,
+    enableHiding: true,
   },
   {
     accessorKey: "date",

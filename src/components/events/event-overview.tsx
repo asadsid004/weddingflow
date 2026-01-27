@@ -46,7 +46,11 @@ export const EventOverviewCard = ({
     : 0;
   const remainingBudget = allocatedBudget - spentBudget;
   const budgetUsedPercentage =
-    allocatedBudget > 0 ? Math.round((spentBudget / allocatedBudget) * 100) : 0;
+    allocatedBudget > 0
+      ? Math.round((spentBudget / allocatedBudget) * 100)
+      : spentBudget > 0
+        ? 100
+        : 0;
   const isOverBudget = remainingBudget < 0;
   const isNearingLimit = budgetUsedPercentage >= 80 && !isOverBudget;
 
