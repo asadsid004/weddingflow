@@ -137,7 +137,7 @@ export const EditBudgetForm = ({
           </ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
         <div className="space-y-4 pt-4">
-          <div className="bg-muted/50 rounded-lg p-3 text-sm">
+          <div className="bg-muted/50 rounded-md p-3 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">
                 Current Total Budget:

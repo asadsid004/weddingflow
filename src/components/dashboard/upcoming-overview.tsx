@@ -100,14 +100,17 @@ export const UpcomingOverview = ({
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="grid gap-4 lg:grid-cols-2">
       <Card className="rounded-md">
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-2">
-            <HugeiconsIcon
-              icon={Calendar02Icon}
-              className="text-muted-foreground h-5 w-5"
-            />
+            <div className="bg-muted/80 rounded-md p-3">
+              <HugeiconsIcon
+                icon={Calendar02Icon}
+                className="size-6"
+                strokeWidth={2}
+              />
+            </div>
             <CardTitle className="text-base font-semibold">
               Upcoming Events
             </CardTitle>
@@ -122,10 +125,11 @@ export const UpcomingOverview = ({
         <CardContent className="space-y-2">
           {upcomingEvents.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 text-center">
-              <div className="bg-muted mb-3 rounded-md p-3">
+              <div className="bg-muted/80 mb-3 rounded-md p-3">
                 <HugeiconsIcon
                   icon={Calendar02Icon}
-                  className="text-muted-foreground h-8 w-8"
+                  className="size-6"
+                  strokeWidth={2}
                 />
               </div>
               <p className="text-muted-foreground text-sm">
@@ -174,10 +178,13 @@ export const UpcomingOverview = ({
       <Card className="rounded-md">
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-2">
-            <HugeiconsIcon
-              icon={Task02Icon}
-              className="text-muted-foreground h-5 w-5"
-            />
+            <div className="bg-muted/80 rounded-md p-3">
+              <HugeiconsIcon
+                icon={Task02Icon}
+                className="size-6"
+                strokeWidth={2}
+              />
+            </div>
             <CardTitle className="text-base font-semibold">
               Priority Tasks
             </CardTitle>

@@ -22,7 +22,7 @@ export const QuickStats = ({ weddingId }: QuickStatsProps) => {
     return (
       <>
         {[...Array(4)].map((_, i) => (
-          <Skeleton key={i} className="h-40 w-full rounded-xl" />
+          <Skeleton key={i} className="h-40 w-full rounded-md" />
         ))}
       </>
     );

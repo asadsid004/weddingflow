@@ -257,7 +257,7 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useSidebar();
+  const { toggleSidebar, isMobile } = useSidebar();
 
   return (
     <Tooltip>
@@ -282,7 +282,7 @@ function SidebarTrigger({
           <span className="sr-only">Toggle Sidebar</span>
         </Button>
       </TooltipTrigger>
-      <TooltipContent side="right">
+      <TooltipContent side="right" hidden={isMobile}>
         <KbdGroup>
           <Kbd>Ctrl</Kbd>
           <p className="text-lg">+</p>

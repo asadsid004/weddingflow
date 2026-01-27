@@ -56,7 +56,7 @@ export const RecentExpensesList = ({
             </div>
           </div>
           <div className="flex-1">
-            <span className="text-lg font-semibold">Recent Expenses</span>
+            <span className="text-base font-semibold">Recent Expenses</span>
             <p className="text-muted-foreground text-sm font-medium">
               Latest transactions
             </p>

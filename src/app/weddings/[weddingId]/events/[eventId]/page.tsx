@@ -17,7 +17,7 @@ const EventDetailsPage = async ({
           { label: "Details" },
         ]}
       />
-      <div className="mx-auto w-full max-w-7xl p-4">
+      <div className="mx-auto w-full max-w-7xl">
         <EventDetails eventId={eventId} weddingId={weddingId} />
       </div>
     </SidebarInset>

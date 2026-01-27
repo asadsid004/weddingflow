@@ -22,7 +22,7 @@ export const EventStatsCard = ({ total, nextEvent }: EventStatsProps) => {
   const daysToNext = nextEvent ? getDaysUntil(nextEvent.date) : null;
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden rounded-md">
       <CardContent className="px-6">
         <div className="mb-6 flex items-start justify-between">
           <div className="flex-1">

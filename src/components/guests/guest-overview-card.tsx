@@ -153,7 +153,7 @@ const MiniMetric = ({
   icon: React.ReactNode;
   color: string;
 }) => (
-  <div className="bg-muted/50 flex items-center justify-between rounded-lg p-2">
+  <div className="bg-muted/50 flex items-center justify-between rounded-md p-2">
     <div className="mb-1 flex items-center gap-1">
       {icon}
       <span className="text-muted-foreground text-xs font-medium uppercase">

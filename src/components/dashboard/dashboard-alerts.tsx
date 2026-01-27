@@ -50,7 +50,7 @@ export const DashboardAlerts = ({ alerts }: DashboardAlertsProps) => {
       {alerts.map((alert, index) => (
         <div
           key={index}
-          className={`flex items-center gap-3 rounded-xl border px-4 py-3 ${getStyles(alert.type)}`}
+          className={`flex items-center gap-3 rounded-md border px-4 py-3 ${getStyles(alert.type)}`}
         >
           <HugeiconsIcon
             icon={

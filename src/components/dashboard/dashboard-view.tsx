@@ -22,16 +22,16 @@ export const DashboardView = ({ weddingId }: DashboardViewProps) => {
     return (
       <div className="space-y-8">
         <div className="space-y-3">
-          <Skeleton className="h-16 w-full rounded-xl" />
+          <Skeleton className="h-16 w-full rounded-md" />
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
-            <Skeleton key={i} className="h-40 w-full rounded-xl" />
+            <Skeleton key={i} className="h-40 w-full rounded-md" />
           ))}
         </div>
         <div className="grid gap-6 md:grid-cols-2">
-          <Skeleton className="h-[400px] rounded-xl" />
-          <Skeleton className="h-[400px] rounded-xl" />
+          <Skeleton className="h-[400px] rounded-md" />
+          <Skeleton className="h-[400px] rounded-md" />
         </div>
       </div>
     );

@@ -52,7 +52,7 @@ export function WeddingSwitcher({ weddings }: { weddings: Wedding[] }) {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+              <div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-md">
                 <HugeiconsIcon icon={FavouriteIcon} strokeWidth={2} />
               </div>
 
@@ -73,7 +73,7 @@ export function WeddingSwitcher({ weddings }: { weddings: Wedding[] }) {
             align="start"
             side={isMobile ? "bottom" : "right"}
             sideOffset={4}
-            className="min-w-56 rounded-lg"
+            className="min-w-56 rounded-md"
           >
             <DropdownMenuLabel className="text-muted-foreground text-xs">
               Weddings

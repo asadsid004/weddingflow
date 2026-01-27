@@ -302,7 +302,7 @@ export function GuestEditDialog({ guest, weddingId }: GuestEditDialogProps) {
                         Events <span className="text-destructive">*</span>
                       </FieldLegend>
                       {eventsLoading ? (
-                        <div className="flex h-32 items-center justify-center rounded-lg border border-dashed text-sm">
+                        <div className="flex h-32 items-center justify-center rounded-md border border-dashed text-sm">
                           <Spinner className="mr-2 h-4 w-4" />
                           Loading events...
                         </div>
