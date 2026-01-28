@@ -49,10 +49,15 @@ const guestSchema = z.object({
 
 interface AddGuestFormProps {
   weddingId: string;
+  eventId?: string;
   setOpen: (open: boolean) => void;
 }
 
-export function AddGuestForm({ weddingId, setOpen }: AddGuestFormProps) {
+export function AddGuestForm({
+  weddingId,
+  eventId,
+  setOpen,
+}: AddGuestFormProps) {
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -91,7 +96,7 @@ export function AddGuestForm({ weddingId, setOpen }: AddGuestFormProps) {
       email: "",
       phoneNumber: "",
       plusOnes: 0,
-      events: [] as string[],
+      events: eventId ? [eventId] : ([] as string[]),
     },
     validators: {
       onSubmit: guestSchema,

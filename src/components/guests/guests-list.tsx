@@ -9,8 +9,14 @@ import { Skeleton } from "../ui/skeleton";
 import { useState } from "react";
 import { AddGuestButton } from "./add-guest-button";
 
-export const GuestsList = ({ weddingId }: { weddingId: string }) => {
-  const [selectedEvent, setSelectedEvent] = useState("all");
+export const GuestsList = ({
+  weddingId,
+  eventId,
+}: {
+  weddingId: string;
+  eventId?: string;
+}) => {
+  const [selectedEvent, setSelectedEvent] = useState(eventId || "all");
 
   const { data: guests, isLoading: guestsLoading } = useQuery({
     queryKey: ["guests", weddingId],
@@ -50,7 +56,7 @@ export const GuestsList = ({ weddingId }: { weddingId: string }) => {
             Manage your invitations and track RSVPs
           </p>
         </div>
-        <AddGuestButton weddingId={weddingId} />
+        <AddGuestButton weddingId={weddingId} eventId={eventId} />
       </div>
 
       <GuestsTable

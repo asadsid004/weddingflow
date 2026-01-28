@@ -17,9 +17,10 @@ import { Add01Icon } from "@hugeicons/core-free-icons";
 
 interface AddGuestButtonProps {
   weddingId: string;
+  eventId?: string;
 }
 
-export const AddGuestButton = ({ weddingId }: AddGuestButtonProps) => {
+export const AddGuestButton = ({ weddingId, eventId }: AddGuestButtonProps) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -40,7 +41,11 @@ export const AddGuestButton = ({ weddingId }: AddGuestButtonProps) => {
           </ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
         <div className="scrollbar-thin flex-1 overflow-y-auto p-4 sm:p-0">
-          <AddGuestForm weddingId={weddingId} setOpen={setOpen} />
+          <AddGuestForm
+            weddingId={weddingId}
+            eventId={eventId}
+            setOpen={setOpen}
+          />
         </div>
       </ResponsiveDialogContent>
     </ResponsiveDialog>
