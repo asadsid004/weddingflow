@@ -14,6 +14,7 @@ interface TaskStatsProps {
   completed: number;
   percentDone: number;
   overdue: number;
+  dueToday: number;
 }
 
 export const TaskStatsCard = ({
@@ -21,6 +22,7 @@ export const TaskStatsCard = ({
   completed,
   percentDone,
   overdue,
+  dueToday,
 }: TaskStatsProps) => {
   const pending = total - completed;
 
@@ -37,15 +39,29 @@ export const TaskStatsCard = ({
               <h3 className="text-3xl font-bold tracking-tight">
                 {completed}/{total}
               </h3>
-              <span
-                className={`text-sm font-semibold ${
-                  overdue > 0
-                    ? "text-destructive"
-                    : "text-purple-600 dark:text-purple-400"
-                }`}
-              >
-                {overdue > 0 ? `${overdue} Overdue` : "All Current"}
-              </span>
+              <div className="flex flex-col gap-1">
+                {overdue ? (
+                  <span
+                    className={`text-sm font-semibold ${
+                      overdue > 0
+                        ? "text-destructive"
+                        : "text-purple-600 dark:text-purple-400"
+                    }`}
+                  >
+                    {overdue > 0 ? `${overdue} Overdue` : "No Overdue"}
+                  </span>
+                ) : (
+                  <span
+                    className={`text-sm font-semibold ${
+                      dueToday > 0
+                        ? "text-emerald-600 dark:text-emerald-400"
+                        : "text-muted-foreground/60"
+                    }`}
+                  >
+                    {dueToday > 0 ? `${dueToday} Due Today` : "0 Due Today"}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
           <div className="ml-4 shrink-0">

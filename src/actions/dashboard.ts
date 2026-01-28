@@ -57,8 +57,22 @@ export const getDashboardStats = async (weddingId: string) => {
 
     const totalTasks = allTasks.length;
     const completedTasks = allTasks.filter(t => t.completed).length;
-    const now = new Date();
-    const overdueTasks = allTasks.filter(t => !t.completed && new Date(t.dueDate) < now).length;
+
+    // Normalize "today" to start of day for comparison
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const overdueTasks = allTasks.filter(t => {
+        const d = new Date(t.dueDate);
+        d.setHours(0, 0, 0, 0);
+        return !t.completed && d < today;
+    }).length;
+
+    const dueTodayTasks = allTasks.filter(t => {
+        const d = new Date(t.dueDate);
+        d.setHours(0, 0, 0, 0);
+        return !t.completed && d.getTime() === today.getTime();
+    }).length;
 
     // 4. Event Stats
     const allEvents = await db
@@ -68,6 +82,7 @@ export const getDashboardStats = async (weddingId: string) => {
         .orderBy(events.date);
 
     const totalEvents = allEvents.length;
+    const now = new Date();
     const upcomingEvents = allEvents
         .filter(e => new Date(e.date) >= now)
         .slice(0, 3);
@@ -100,6 +115,14 @@ export const getDashboardStats = async (weddingId: string) => {
         });
     }
 
+    if (dueTodayTasks > 0) {
+        alerts.push({
+            type: 'warning',
+            message: `You have ${dueTodayTasks} task${dueTodayTasks > 1 ? 's' : ''} due today.`,
+            category: 'tasks'
+        });
+    }
+
     const pendingRSVPs = allGuests.filter(g => g.events.some(e => e.rsvp === 'pending')).length;
 
     return {
@@ -120,16 +143,23 @@ export const getDashboardStats = async (weddingId: string) => {
             total: totalTasks,
             completed: completedTasks,
             overdue: overdueTasks,
+            dueToday: dueTodayTasks,
             percentDone: totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0,
             priorityTasks: allTasks
                 .filter(t => !t.completed)
                 .sort((a, b) => {
                     // Priority sorting: Overdue first, then by date
-                    const aOverdue = new Date(a.dueDate) < now;
-                    const bOverdue = new Date(b.dueDate) < now;
+                    const aDate = new Date(a.dueDate);
+                    aDate.setHours(0, 0, 0, 0);
+                    const bDate = new Date(b.dueDate);
+                    bDate.setHours(0, 0, 0, 0);
+
+                    const aOverdue = aDate < today;
+                    const bOverdue = bDate < today;
+
                     if (aOverdue && !bOverdue) return -1;
                     if (!aOverdue && bOverdue) return 1;
-                    return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+                    return aDate.getTime() - bDate.getTime();
                 })
                 .slice(0, 5),
         },

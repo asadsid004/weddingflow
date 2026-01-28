@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateTask } from "@/actions/tasks";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
 interface DashboardEvent {
@@ -44,6 +44,10 @@ export const UpcomingOverview = ({
 }: UpcomingOverviewProps) => {
   const queryClient = useQueryClient();
   const [localTasks, setLocalTasks] = useState(priorityTasks);
+
+  useEffect(() => {
+    setLocalTasks(priorityTasks);
+  }, [priorityTasks]);
 
   const mutation = useMutation({
     mutationFn: ({
@@ -81,6 +85,11 @@ export const UpcomingOverview = ({
         setLocalTasks(priorityTasks);
       }
       toast.error("Failed to update task");
+    },
+    onSuccess: (data, variables) => {
+      if (variables.completed) {
+        toast.success("Task marked as completed");
+      }
     },
     onSettled: () => {
       queryClient.invalidateQueries({
@@ -197,7 +206,7 @@ export const UpcomingOverview = ({
           </Button>
         </CardHeader>
         <CardContent className="space-y-2">
-          {localTasks.length === 0 ? (
+          {localTasks.filter((t) => !t.completed).length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <div className="bg-muted mb-3 rounded-md p-3">
                 <HugeiconsIcon
@@ -210,74 +219,74 @@ export const UpcomingOverview = ({
               </p>
             </div>
           ) : (
-            localTasks.map((task) => {
-              const overdue =
-                !task.completed && new Date(task.dueDate) < new Date();
-              return (
-                <div
-                  key={task.id}
-                  className={`flex items-center gap-3 rounded-md border p-3 transition-all ${
-                    task.completed
-                      ? "bg-muted/30 opacity-60"
-                      : "bg-card hover:bg-muted/50"
-                  }`}
-                >
-                  <button
-                    onClick={() =>
-                      mutation.mutate({
-                        taskId: task.id,
-                        completed: !task.completed,
-                      })
-                    }
-                    className="shrink-0"
-                  >
-                    <HugeiconsIcon
-                      icon={task.completed ? CheckmarkSquare02Icon : SquareIcon}
-                      className="h-5 w-5"
-                      strokeWidth={task.completed ? 2.5 : 2}
-                    />
-                  </button>
+            localTasks
+              .filter((t) => !t.completed)
+              .map((task) => {
+                const dueDate = new Date(task.dueDate);
+                dueDate.setHours(0, 0, 0, 0);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
 
-                  <div className="min-w-0 flex-1">
-                    <p
-                      className={`truncate text-sm font-medium ${
-                        task.completed
-                          ? "text-muted-foreground line-through"
-                          : ""
-                      }`}
+                const overdue = !task.completed && dueDate < today;
+                const dueToday =
+                  !task.completed && dueDate.getTime() === today.getTime();
+                return (
+                  <div
+                    key={task.id}
+                    className="bg-card hover:bg-muted/50 flex items-center gap-3 rounded-md border p-3 transition-all"
+                  >
+                    <button
+                      onClick={() =>
+                        mutation.mutate({
+                          taskId: task.id,
+                          completed: !task.completed,
+                        })
+                      }
+                      className="shrink-0"
                     >
-                      {task.title}
-                    </p>
-                    <div className="mt-0.5 flex items-center gap-2">
-                      <span
-                        className={`text-xs ${
-                          overdue
-                            ? "font-medium text-red-600"
-                            : "text-muted-foreground"
-                        }`}
+                      <HugeiconsIcon
+                        icon={
+                          task.completed ? CheckmarkSquare02Icon : SquareIcon
+                        }
+                        className="h-5 w-5"
+                        strokeWidth={task.completed ? 2.5 : 2}
+                      />
+                    </button>
+
+                    <div className="min-w-0 flex-1">
+                      <p
+                        className={`truncate text-sm font-medium ${task.completed ? "text-muted-foreground line-through" : ""}`}
                       >
-                        {overdue
-                          ? "Overdue"
-                          : `Due ${formatDate(task.dueDate, "MMM dd")}`}
-                      </span>
-                      <span className="text-muted-foreground">•</span>
-                      <span
-                        className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${
-                          task.priority === "high"
-                            ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                            : task.priority === "medium"
-                              ? "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400"
-                              : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                        }`}
-                      >
-                        {task.priority.charAt(0).toUpperCase() +
-                          task.priority.slice(1)}
-                      </span>
+                        {task.title}
+                      </p>
+                      <div className="mt-0.5 flex items-center gap-2">
+                        <span
+                          className={`text-xs ${overdue ? "font-medium text-red-600" : dueToday ? "font-semibold text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"}`}
+                        >
+                          {overdue
+                            ? "Overdue"
+                            : dueToday
+                              ? "Due Today"
+                              : `Due ${formatDate(task.dueDate, "MMM dd")}`}
+                        </span>
+                        <span className="text-muted-foreground">•</span>
+                        <span
+                          className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${
+                            task.priority === "high"
+                              ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                              : task.priority === "medium"
+                                ? "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400"
+                                : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                          }`}
+                        >
+                          {task.priority.charAt(0).toUpperCase() +
+                            task.priority.slice(1)}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })
+                );
+              })
           )}
         </CardContent>
       </Card>

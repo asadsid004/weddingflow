@@ -156,11 +156,14 @@ export const createTaskColumns = (
     },
     cell: ({ row }) => {
       const dueDate = new Date(row.getValue("dueDate"));
+      dueDate.setHours(0, 0, 0, 0);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const isOverdue = dueDate < today && !row.original.completed;
+      const isDueToday =
+        dueDate.getTime() === today.getTime() && !row.original.completed;
       const isDueSoon =
-        dueDate >= today &&
+        dueDate > today &&
         dueDate <= new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000) &&
         !row.original.completed;
 
@@ -169,13 +172,16 @@ export const createTaskColumns = (
           className={`text-sm text-wrap ${
             isOverdue
               ? "text-destructive font-semibold"
-              : isDueSoon
-                ? "font-medium text-amber-600 dark:text-amber-400"
-                : ""
+              : isDueToday
+                ? "font-semibold text-emerald-600 dark:text-emerald-400"
+                : isDueSoon
+                  ? "font-medium text-amber-600 dark:text-amber-400"
+                  : ""
           }`}
         >
           {dueDate.toLocaleDateString("en-GB")}
           {isOverdue && <span className="ml-1 text-xs">(Overdue)</span>}
+          {isDueToday && <span className="ml-1 text-xs">(Due Today)</span>}
           {isDueSoon && <span className="ml-1 text-xs">(Due Soon)</span>}
         </div>
       );

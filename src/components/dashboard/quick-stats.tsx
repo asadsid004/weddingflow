@@ -47,6 +47,7 @@ export const QuickStats = ({ weddingId }: QuickStatsProps) => {
         completed={data.tasks.completed}
         percentDone={data.tasks.percentDone}
         overdue={data.tasks.overdue}
+        dueToday={data.tasks.dueToday}
       />
       <EventStatsCard
         total={data.events.total}
