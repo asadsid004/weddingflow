@@ -102,7 +102,7 @@ export const getDashboardStats = async (weddingId: string) => {
     if (totalBudget > 0 && spentBudget > totalBudget) {
         alerts.push({
             type: 'warning',
-            message: `You are ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(spentBudget - totalBudget)} over budget.`,
+            message: `You are ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(spentBudget - totalBudget)} L over budget.`,
             category: 'budget'
         });
     }

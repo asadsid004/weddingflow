@@ -67,7 +67,8 @@ export const BudgetOverview = ({ weddingId }: { weddingId: string }) => {
       );
       const allocated = Number(event.allocatedBudget || 0);
       const eventRemaining = allocated - spent;
-      const eventPercentage = allocated > 0 ? (spent / allocated) * 100 : 0;
+      const eventPercentage =
+        allocated > 0 ? (spent / allocated) * 100 : spent > 0 ? 100 : 0;
 
       return {
         id: event.id,
@@ -94,7 +95,11 @@ export const BudgetOverview = ({ weddingId }: { weddingId: string }) => {
   const generalAllocated = totalBudget - totalAllocatedToEvents;
   const generalRemaining = generalAllocated - generalSpent;
   const generalPercentage =
-    generalAllocated > 0 ? (generalSpent / generalAllocated) * 100 : 0;
+    generalAllocated > 0
+      ? (generalSpent / generalAllocated) * 100
+      : generalSpent > 0
+        ? 100
+        : 0;
 
   const getBudgetStatus = (percentage: number) => {
     if (percentage > 100)
@@ -228,7 +233,9 @@ export const BudgetOverview = ({ weddingId }: { weddingId: string }) => {
         <h2 className="mb-4 text-lg font-semibold">Budget by Event</h2>
         <div className="space-y-3">
           {eventBudgets.map((event) => {
-            const status = getBudgetStatus(event.percentage);
+            const status = event.isOverBudget
+              ? getBudgetStatus(101)
+              : getBudgetStatus(event.percentage);
             return (
               <div
                 key={event.id}
@@ -317,19 +324,19 @@ export const BudgetOverview = ({ weddingId }: { weddingId: string }) => {
                 </div>
                 <div className="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
                   <span className="whitespace-nowrap">
-                    ${generalAllocated.toLocaleString()} allocated
+                    ₹{generalAllocated.toLocaleString()} L allocated
                   </span>
                   <span className="hidden sm:inline">•</span>
                   <span
                     className={`whitespace-nowrap ${generalSpent > generalAllocated ? "font-medium text-red-600" : ""}`}
                   >
-                    ${generalSpent.toLocaleString()} spent
+                    ₹{generalSpent.toLocaleString()} L spent
                   </span>
                   <span className="hidden sm:inline">•</span>
                   <span
                     className={`whitespace-nowrap ${generalRemaining < 0 ? "font-medium text-red-600" : "text-green-600"}`}
                   >
-                    ${Math.abs(generalRemaining).toLocaleString()}{" "}
+                    ₹{Math.abs(generalRemaining).toLocaleString()} L{" "}
                     {generalRemaining < 0 ? "over" : "left"}
                   </span>
                 </div>
