@@ -2,7 +2,7 @@
 
 import { eq, and } from "drizzle-orm";
 import { db } from "@/db/drizzle";
-import { expenses, events, weddings } from "@/db/schema";
+import { expenses, events, weddings, ExpenseCategory } from "@/db/schema";
 import { isAuthenticated } from "@/lib/auth-helpers";
 
 export const createExpense = async ({
@@ -11,12 +11,14 @@ export const createExpense = async ({
     amount,
     eventId,
     date,
+    category,
 }: {
     weddingId: string;
     description: string;
     amount: number;
     eventId: string;
     date: string;
+    category: ExpenseCategory;
 }) => {
     const session = await isAuthenticated();
 
@@ -53,6 +55,7 @@ export const createExpense = async ({
             description,
             amount: amount.toFixed(2),
             date,
+            category,
         })
         .returning();
 
@@ -82,12 +85,14 @@ export const updateExpense = async ({
     amount,
     eventId,
     date,
+    category,
 }: {
     expenseId: string;
     description: string;
     amount: number;
     eventId: string;
     date: string;
+    category: ExpenseCategory;
 }) => {
     const session = await isAuthenticated();
 
@@ -109,6 +114,7 @@ export const updateExpense = async ({
             amount: amount.toFixed(2),
             eventId,
             date,
+            category,
         })
         .where(eq(expenses.id, expenseId))
         .returning();

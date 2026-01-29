@@ -21,6 +21,14 @@ import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
 import { getEvents } from "@/actions/events";
 import Link from "next/link";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { expenseCategories, ExpenseCategory } from "@/db/schema";
 
 const expenseSchema = z.object({
   description: z.string().min(1, "Description is required"),
@@ -32,6 +40,7 @@ const expenseSchema = z.object({
       "Amount must be a positive number",
     ),
   date: z.date(),
+  category: z.enum(expenseCategories),
   eventId: z.string().min(1, "Please select an event"),
 });
 
@@ -47,6 +56,7 @@ export const EditExpenseButton = ({
     amount: string;
     date: string;
     eventId: string;
+    category: string;
   };
 }) => {
   const [open, setOpen] = useState(false);
@@ -79,6 +89,7 @@ export const EditExpenseButton = ({
       amount: expense.amount || "",
       date: expense.date ? new Date(expense.date) : new Date(),
       eventId: expense.eventId || "",
+      category: expense.category || "",
     },
     validators: {
       onSubmit: expenseSchema,
@@ -90,6 +101,7 @@ export const EditExpenseButton = ({
         amount: Number(value.amount),
         eventId: value.eventId,
         date: new Date(value.date).toISOString().split("T")[0],
+        category: value.category as ExpenseCategory,
       });
     },
   });
@@ -105,7 +117,9 @@ export const EditExpenseButton = ({
       </ResponsiveDialogTrigger>
       <ResponsiveDialogContent>
         <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>Edit Expense</ResponsiveDialogTitle>
+          <ResponsiveDialogTitle className="pb-2 text-center">
+            Edit Expense
+          </ResponsiveDialogTitle>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -234,24 +248,26 @@ export const EditExpenseButton = ({
                           </span>
                         </p>
                       ) : (
-                        <select
-                          id={field.name}
+                        <Select
                           name={field.name}
                           value={field.state.value}
-                          onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                          onValueChange={(e) => field.handleChange(e)}
                           aria-invalid={isInvalid}
                         >
-                          <option value="" disabled>
-                            Select an event
-                          </option>
-                          {events?.map((event) => (
-                            <option key={event.id} value={event.id}>
-                              {event.name}
-                            </option>
-                          ))}
-                        </select>
+                          <SelectTrigger
+                            size="sm"
+                            className="bg-background w-full"
+                          >
+                            <SelectValue placeholder="Select an event" />
+                          </SelectTrigger>
+                          <SelectContent className="z-10000" position="popper">
+                            {events?.map((event) => (
+                              <SelectItem key={event.id} value={event.id}>
+                                {event.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       )}
                       {isInvalid && (
                         <FieldError errors={field.state.meta.errors} />
@@ -261,7 +277,39 @@ export const EditExpenseButton = ({
                 }}
               </form.Field>
             </FieldGroup>
-
+            <form.Field name="category">
+              {(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
+                return (
+                  <FieldSet className="mt-2 w-full">
+                    <FieldLegend variant="label" className="mb-1">
+                      Category <span className="text-destructive">*</span>
+                    </FieldLegend>
+                    <Select
+                      name={field.name}
+                      value={field.state.value}
+                      onValueChange={(e) => field.handleChange(e)}
+                      aria-invalid={isInvalid}
+                    >
+                      <SelectTrigger size="sm" className="bg-background w-full">
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent className="z-10000" position="popper">
+                        {expenseCategories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </FieldSet>
+                );
+              }}
+            </form.Field>
             <Button
               type="submit"
               className="mt-4 w-full"

@@ -29,6 +29,7 @@ import {
 import { useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Search01Icon } from "@hugeicons/core-free-icons";
+import { expenseCategories } from "@/db/schema";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -72,7 +73,7 @@ export function ExpenseTable<TData, TValue>({
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <HugeiconsIcon
             icon={Search01Icon}
@@ -85,29 +86,57 @@ export function ExpenseTable<TData, TValue>({
             className="pl-9"
           />
         </div>
-        <div className="flex w-auto min-w-[200px] items-center gap-2">
-          <Select
-            value={
-              (table.getColumn("eventId")?.getFilterValue() as string) || "all"
-            }
-            onValueChange={(value) =>
-              table
-                .getColumn("eventId")
-                ?.setFilterValue(value === "all" ? "" : value)
-            }
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="All Events" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Events</SelectItem>
-              {events.map((event) => (
-                <SelectItem key={event.id} value={event.id}>
-                  {event.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="w-auto min-w-[180px]">
+            <Select
+              value={
+                (table.getColumn("eventId")?.getFilterValue() as string) ||
+                "all"
+              }
+              onValueChange={(value) =>
+                table
+                  .getColumn("eventId")
+                  ?.setFilterValue(value === "all" ? "" : value)
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="All Events" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Events</SelectItem>
+                {events.map((event) => (
+                  <SelectItem key={event.id} value={event.id}>
+                    {event.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="w-auto min-w-[180px]">
+            <Select
+              value={
+                (table.getColumn("category")?.getFilterValue() as string) ||
+                "all"
+              }
+              onValueChange={(value) =>
+                table
+                  .getColumn("category")
+                  ?.setFilterValue(value === "all" ? "" : value)
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="All Categories" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                {expenseCategories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 

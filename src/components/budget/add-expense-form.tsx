@@ -13,6 +13,14 @@ import Link from "next/link";
 import { createExpense } from "@/actions/budgets";
 import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
+import { expenseCategories, ExpenseCategory } from "@/db/schema";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const expenseSchema = z.object({
   description: z.string().min(1, "Description is required"),
@@ -25,6 +33,7 @@ const expenseSchema = z.object({
     ),
   date: z.date(),
   eventId: z.string().min(1, "Please select an event"),
+  category: z.enum(expenseCategories, "Please select a category"),
 });
 
 export const AddExpenseForm = ({
@@ -42,6 +51,7 @@ export const AddExpenseForm = ({
       amount: "",
       date: new Date(),
       eventId: initialEventId || "",
+      category: "",
     },
     validators: {
       onSubmit: expenseSchema,
@@ -53,6 +63,7 @@ export const AddExpenseForm = ({
         amount: Number(value.amount),
         eventId: value.eventId,
         date: value.date.toISOString(),
+        category: value.category as ExpenseCategory,
       });
     },
   });
@@ -206,24 +217,23 @@ export const AddExpenseForm = ({
                     </span>
                   </p>
                 ) : (
-                  <select
-                    id={field.name}
+                  <Select
                     name={field.name}
                     value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                    onValueChange={(e) => field.handleChange(e)}
                     aria-invalid={isInvalid}
                   >
-                    <option value="" disabled>
-                      Select an event
-                    </option>
-                    {events?.map((event) => (
-                      <option key={event.id} value={event.id}>
-                        {event.name}
-                      </option>
-                    ))}
-                  </select>
+                    <SelectTrigger size="sm" className="bg-background w-full">
+                      <SelectValue placeholder="Select an event" />
+                    </SelectTrigger>
+                    <SelectContent className="z-10000" position="popper">
+                      {events?.map((event) => (
+                        <SelectItem key={event.id} value={event.id}>
+                          {event.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 )}
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </FieldSet>
@@ -231,6 +241,37 @@ export const AddExpenseForm = ({
           }}
         </form.Field>
       </FieldGroup>
+      <form.Field name="category">
+        {(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <FieldSet className="mt-2 w-full">
+              <FieldLegend variant="label" className="mb-1">
+                Category <span className="text-destructive">*</span>
+              </FieldLegend>
+              <Select
+                name={field.name}
+                value={field.state.value}
+                onValueChange={(e) => field.handleChange(e)}
+                aria-invalid={isInvalid}
+              >
+                <SelectTrigger size="sm" className="bg-background w-full">
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+                <SelectContent className="z-10000" position="popper">
+                  {expenseCategories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </FieldSet>
+          );
+        }}
+      </form.Field>
 
       <Button
         type="submit"

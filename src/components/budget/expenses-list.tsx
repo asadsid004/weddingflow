@@ -54,6 +54,7 @@ export const ExpensesList = ({
       date: expense.date,
       eventName: eventMap.get(expense.eventId || "") || "Unknown Event",
       weddingId: weddingId,
+      category: expense.category,
     })) || [];
 
   const columns = createExpenseColumns();
